@@ -1,13 +1,12 @@
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                               Imports and Constants
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-const moduleName = 'does-it-hit-a5e';
-const moduleTag = 'Does it Hit?!';
+import { moduleName, moduleTag } from './constants.js';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                   AC Check Class
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-class DoesItHit {
+export class hitCheck {
 	constructor() {
 		Hooks.on('attackRoll', this._confirmHit.bind(this));
 	}
@@ -120,37 +119,7 @@ class DoesItHit {
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                             Damage Application Class
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-class ApplyDamage {}
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                     Hooks
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Hooks.once('ready', async function () {
-	console.log(`${moduleTag} | Initializing. `);
-
-	// Dummy hook
-	libWrapper.register(
-		moduleName,
-		'CONFIG.Actor.documentClass.prototype.constructItemCard',
-		function (wrapped, data) {
-			const actor = this.data;
-			const item = actor.items.get(data.id);
-			if (data.attack?.roll) {
-				const roll = data.attack.roll;
-				Hooks.call('attackRoll', item, roll, actor, data);
-			}
-
-			return wrapped(data);
-		},
-		'WRAPPER'
-	);
-
-	new DoesItHit();
-});
-
-Hooks.on('renderChatMessage', async function (msg, $html) {
-	if (game.user.isGM) return;
-
-	console.log(msg);
-	if (msg.data.blind) $html.addClass('dih--hidden');
-});

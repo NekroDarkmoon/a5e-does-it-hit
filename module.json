@@ -16,7 +16,7 @@
     }
   ],
   "esmodules": [
-    "/scripts/module.js"
+    "./index.js"
   ],
   "scripts": [],
   "styles": [
