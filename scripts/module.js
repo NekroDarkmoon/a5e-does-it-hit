@@ -5,7 +5,7 @@ const moduleName = 'does-it-hit-a5e';
 const moduleTag = 'Does it Hit?!';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                                   Main Class
+//                                   AC Check Class
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 class DoesItHit {
 	constructor() {
@@ -20,7 +20,7 @@ class DoesItHit {
 	 * @param {*} options
 	 * @returns
 	 */
-	_confirmHit(item, roll, actor, options) {
+	_confirmHit(item, roll, actor, dataOptions) {
 		if (roll.options?.rollMode === 'selfRoll') return;
 
 		// Get targetted tokens
@@ -44,9 +44,7 @@ class DoesItHit {
 		const msgData = {
 			blind: true,
 			content: html,
-			flavor: game.i18n.format(`${moduleName}.card-title`, {
-				name: actor.data.name,
-			}),
+			flavor: game.i18n.localize(`${moduleName}.card-title`),
 			speaker: ChatMessage.getSpeaker({ actor }),
 			type: CONST.CHAT_MESSAGE_TYPES.OTHER,
 			user: game.user.data._id,
@@ -120,8 +118,9 @@ class DoesItHit {
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                                    Imports
+//                             Damage Application Class
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+class ApplyDamage {}
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                     Hooks
@@ -138,7 +137,7 @@ Hooks.once('ready', async function () {
 			const item = actor.items.get(data.id);
 			if (data.attack?.roll) {
 				const roll = data.attack.roll;
-				Hooks.call('attackRoll', item, roll, actor, {});
+				Hooks.call('attackRoll', item, roll, actor, data);
 			}
 
 			return wrapped(data);
