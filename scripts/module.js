@@ -43,14 +43,17 @@ class DoesItHit {
 		`;
 
 		const msgData = {
-			whisper: ChatMessage.getWhisperRecipients('GM'),
+			// whisper: ChatMessage.getWhisperRecipients('GM'),
 			blind: true,
 			user: game.user.data._id,
+			type: CONST.CHAT_MESSAGE_TYPES.OTHER,
 			speaker: ChatMessage.getSpeaker({ actor }),
 			content: html,
 		};
 
 		setTimeout(_ => ChatMessage.create(msgData), 0);
+
+		Hooks.call('attackRollHit', item, roll, actor);
 	}
 
 	/**
@@ -102,7 +105,7 @@ class DoesItHit {
 					/>
 					<h3 class="dih__h3">${token.data.name}</h3>
 					<div class="dih__roll-display">${rollTotal}</div>
-					<div class="dih__hit-label">${label}</div>
+					<div class="dih__hit-label ${isHit ? 'dih--hit' : 'dih--miss'}">${label}</div>
           <div class="dih__ac-display">${ac}</div>
 				</li>
 			`;
@@ -118,22 +121,8 @@ class DoesItHit {
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                                    Imports
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                                    Imports
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                                    Imports
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                     Hooks
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Hooks.once('init', async function () {});
-
 Hooks.once('ready', async function () {
 	console.log(`${moduleTag} | Initializing. `);
 
@@ -142,7 +131,6 @@ Hooks.once('ready', async function () {
 		moduleName,
 		'CONFIG.Actor.documentClass.prototype.constructItemCard',
 		function (wrapped, data) {
-			console.log(data);
 			const actor = this.data;
 			const item = actor.items.get(data.id);
 			if (data.attack?.roll) {
@@ -156,4 +144,11 @@ Hooks.once('ready', async function () {
 	);
 
 	new DoesItHit();
+});
+
+Hooks.on('renderChatMessage', async function (msg, $html) {
+	if (game.user.isGM) return;
+
+	console.log(msg);
+	if (msg.data.blind) $html.addClass('dih--hidden');
 });
