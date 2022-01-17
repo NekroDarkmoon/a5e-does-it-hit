@@ -29,9 +29,29 @@ class DoesItHit {
 		);
 		if (!targets.length) return;
 
-		// Get Display Data
-		const displayData = targets.map(t => this._checkHit(t, roll));
-		console.log(displayData);
+		// Get hit data
+		const hitData = targets.map(t => this._checkHit(t, roll));
+		console.log(hitData);
+
+		// Construct Display data
+		const displayData = this._displayData(hitData);
+
+		const html = `
+			<ul class="a5e-chat-card dih-card">
+			${this._displayData(hitData, roll)} 
+			</ul>
+		`;
+
+		const msgData = {
+			whisper: ChatMessage.getWhisperRecipients('GM'),
+			blind: true,
+			user: game.user.data._id,
+			type: CONST.CHAT_MESSAGE_TYPES.WHISPER,
+			speaker: ChatMessage.getSpeaker({ actor }),
+			content: html,
+		};
+
+		setTimeout(_ => ChatMessage.create(msgData), 0);
 	}
 
 	/**
@@ -57,7 +77,40 @@ class DoesItHit {
 
 		const isHit = !isFumble && (isCritHit || rollTotal >= ac);
 
-		return { ac, isCritHit, isFumble, isHit, token };
+		return { ac, isCritHit, isFumble, isHit, rollTotal, token };
+	}
+
+	_displayData(hitData) {
+		const data = hitData.map(
+			({ ac, isCritHit, isFumble, isHit, rollTotal, token }) => {
+				const label =
+					isCritHit || isFumble
+						? isCritHit
+							? 'Critically Hit'
+							: 'Criticaly Misses'
+						: isHit
+						? 'Hits'
+						: 'Misses';
+
+				return `
+				<li class="dih__target">
+					<img 
+						class="dih__img-display" 
+						src="${token.data.img}"
+						title="${token.data.name}"
+						width="30px"
+						height="30px"
+					/>
+					<h3 class="dih__h3">${token.data.name}</h3>
+					<div class="dih__roll-display">${rollTotal}</div>
+					<div class="dih__hit-label">${label}</div> 
+          <div class="dih__ac-display">${ac}</div>
+				</li>
+			`;
+			}
+		);
+
+		return data.join('');
 	}
 }
 

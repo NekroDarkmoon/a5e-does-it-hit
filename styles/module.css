@@ -1,0 +1,17 @@
+.dih-card {
+	padding: 0.25rem;
+	margin: 0;
+}
+
+.dih__target {
+	display: grid;
+	grid-template-columns: 2.5rem 1fr 1.8rem 3.8rem 1.8rem;
+	align-items: center;
+	gap: 0.025rem;
+}
+
+.dih__h3 {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
