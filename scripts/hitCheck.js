@@ -2,6 +2,7 @@
 //                               Imports and Constants
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 import { moduleName, moduleTag } from './constants.js';
+import { constructCard } from './constructCard.js';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                     Main Class
@@ -29,8 +30,16 @@ export class hitCheck {
 		const dmgData = hitData.map(h => this._getDmgData(h, item, _data));
 		console.log(dmgData);
 
+		// TODO: Move to constructCard
 		// Construct display Data
-		const html = ``;
+		const html = `
+			<ul class="a5e-chat-card dih-card">
+			${constructCard.hitCheck(hitData)} 
+			</ul>
+		`;
+
+		// Send data to message
+		constructCard.toMessage(actor, html);
 	}
 
 	_getHitData(i, r, t) {

@@ -36,7 +36,7 @@ export class hitCheck {
 		// Construct Display Data
 		const html = `
 			<ul class="a5e-chat-card dih-card">
-			${this._displayData(hitData, roll)} 
+			${this._displayData(hitData)} 
 			</ul>
 		`;
 
