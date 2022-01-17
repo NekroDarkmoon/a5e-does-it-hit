@@ -20,6 +20,7 @@ Hooks.once('setup', async function () {
 });
 
 Hooks.once('ready', async function () {
+	// Enable Hit Check and damage application
 	new hitCheck();
 
 	console.log(`${moduleTag} | Ready.`);

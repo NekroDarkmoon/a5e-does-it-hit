@@ -4,122 +4,95 @@
 import { moduleName, moduleTag } from './constants.js';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                                   AC Check Class
+//                                     Main Class
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 export class hitCheck {
 	constructor() {
-		Hooks.on('attackRoll', this._confirmHit.bind(this));
+		Hooks.on('attackRoll', this._hitHandler.bind(this));
 	}
 
-	/**
-	 *
-	 * @param {*} item
-	 * @param {*} roll
-	 * @param {*} actor
-	 * @param {*} options
-	 * @returns
-	 */
-	_confirmHit(item, roll, actor, dataOptions) {
+	_hitHandler(item, roll, actor, _data) {
 		if (roll.options?.rollMode === 'selfRoll') return;
 
-		// Get targetted tokens
+		// Get Targets
 		const targets = [...(game.user.targets?.values() ?? [])].filter(
 			t => !!t.actor
 		);
+
 		if (!targets.length) return;
 
-		// Get hit data
-		const critThreshold = item.data.data.attack.critThreshold;
-		const hitData = targets.map(t => this._checkHit(critThreshold, roll, t));
+		// Get Hit Data
+		const hitData = targets.map(t => this._getHitData(item, roll, t));
 		console.log(hitData);
 
-		// Construct Display Data
-		const html = `
-			<ul class="a5e-chat-card dih-card">
-			${this._displayData(hitData, roll)} 
-			</ul>
-		`;
+		// Get Damage Data
+		const dmgData = hitData.map(h => this._getDmgData(h, item, _data));
+		console.log(dmgData);
 
-		const msgData = {
-			blind: true,
-			content: html,
-			flavor: game.i18n.localize(`${moduleName}.card-title`),
-			speaker: ChatMessage.getSpeaker({ actor }),
-			type: CONST.CHAT_MESSAGE_TYPES.OTHER,
-			user: game.user.data._id,
-			// whisper: ChatMessage.getWhisperRecipients('GM'),
-		};
-
-		setTimeout(_ => ChatMessage.create(msgData), 0);
-
-		Hooks.call('attackRollHit', item, roll, actor);
+		// Construct display Data
+		const html = ``;
 	}
 
-	/**
-	 *
-	 * @param {*} critThreshold
-	 * @param {*} roll
-	 * @param {*} token
-	 * @returns {}
-	 */
-	_checkHit(critThreshold, roll, token) {
-		// Get AC
-		const ac = token.actor.data.data.attributes.ac;
-		const rollTotal = roll.total;
-		const d20 = roll.dice[0];
+	_getHitData(i, r, t) {
+		// Construct Required Vars
+		const ac = t.actor.data.data.attributes.ac;
+		const rollTotal = r.total;
+		const d20 = r.dice[0];
+		const critThreshold = i.data.data.attack.critThreshold;
 
-		// Check if critical hit or miss
-		const isCritHit =
-			d20.faces === 20 &&
-			d20.values.length === 1 &&
-			d20.total >= (critThreshold ?? 20);
+		const isCrit = d20.faces === 20 && d20.total >= (critThreshold ?? 20);
+		const isFumble = d20.faces === 20 && d20.total === 1;
 
-		const isFumble =
-			d20.faces === 20 && d20.values.length === 1 && d20.total === 1;
+		const isHit = !isFumble && (isCrit || rollTotal >= ac);
 
-		const isHit = !isFumble && (isCritHit || rollTotal >= ac);
+		const data = { ac, isCrit, isFumble, isHit, rollTotal, token: t };
 
-		return { ac, isCritHit, isFumble, isHit, rollTotal, token };
+		// API Integration - Hook Calls
+		if (isCrit) Hooks.call('dih-attackRollCrit', data);
+		if (isFumble) Hooks.call('dih-attackRollFumble', data);
+		if (isHit) Hooks.call('dih-attackRollHit', data);
+		if (!isHit) Hooks.call('dih-attackRollMiss', data);
+
+		return data;
 	}
 
-	_displayData(hitData) {
-		const data = hitData.map(
-			({ ac, isCritHit, isFumble, isHit, rollTotal, token }) => {
-				const label =
-					isCritHit || isFumble
-						? isCritHit
-							? game.i18n.localize(`${moduleName}.crit`)
-							: game.i18n.localize(`${moduleName}.fumble`)
-						: isHit
-						? game.i18n.localize(`${moduleName}.hit`)
-						: game.i18n.localize(`${moduleName}.miss`);
+	//
+	_getDmgData(hitData, item, _data) {
+		// Construct required vars
+		const { isHit, token } = hitData;
+		const dmgRolls = _data.damage;
+		const resistances = token.actor.data.data.traits.damageResistances;
+		const immunities = token.actor.data.data.traits.damageImmunities;
+		const vulnerabilities = token.actor.data.data.traits.damageVulnerabilities;
 
-				return `
-				<li class="dih__target">
-					<img 
-						class="dih__img-display" 
-						src="${token.data.img}"
-						title="${token.data.name}"
-						width="30px"
-						height="30px"
-					/>
-					<h3 class="dih__h3">${token.data.name}</h3>
-					<div class="dih__roll-display">${rollTotal}</div>
-					<div class="dih__hit-label ${isHit ? 'dih--hit' : 'dih--miss'}">${label}</div>
-          <div class="dih__ac-display">${ac}</div>
-				</li>
-			`;
-			}
-		);
+		// Perform resistance and immunity checks
+		const damageArray = dmgRolls.map(roll => {
+			return { total: roll.roll.total, type: roll.damageType };
+		});
 
-		return data.join('');
+		const appliedDamage = damageArray.map(dmg => {
+			let value = dmg.total;
+			if (resistances.includes(dmg.type)) value = Math.floor(value / 2);
+			if (vulnerabilities.includes(dmg.type)) value = Math.floor(value * 2);
+			if (immunities.includes(dmg.type)) value = 0;
+
+			return { type: dmg.type, value };
+		});
+
+		const damage = appliedDamage.reduce((a, b) => a + b.value, 0);
+		const data = { appliedDamage, damage, isHit, token };
+
+		// API Integration - Hook Callls
+		Hooks.call('dih-preDamageApply', data);
+
+		return data;
 	}
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                             Damage Application Class
+//                               Imports and Constants
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                                     Hooks
+//                               Imports and Constants
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
