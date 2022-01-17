@@ -46,7 +46,6 @@ class DoesItHit {
 			whisper: ChatMessage.getWhisperRecipients('GM'),
 			blind: true,
 			user: game.user.data._id,
-			type: CONST.CHAT_MESSAGE_TYPES.WHISPER,
 			speaker: ChatMessage.getSpeaker({ actor }),
 			content: html,
 		};
@@ -86,8 +85,8 @@ class DoesItHit {
 				const label =
 					isCritHit || isFumble
 						? isCritHit
-							? 'Critically Hit'
-							: 'Criticaly Misses'
+							? 'Critical'
+							: 'Fumble'
 						: isHit
 						? 'Hits'
 						: 'Misses';
@@ -103,7 +102,7 @@ class DoesItHit {
 					/>
 					<h3 class="dih__h3">${token.data.name}</h3>
 					<div class="dih__roll-display">${rollTotal}</div>
-					<div class="dih__hit-label">${label}</div> 
+					<div class="dih__hit-label">${label}</div>
           <div class="dih__ac-display">${ac}</div>
 				</li>
 			`;
