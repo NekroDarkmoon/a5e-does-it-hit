@@ -28,7 +28,14 @@
 }
 
 .dih__roll-display {
+	background: rgb(0 0 0 / 0.15);
+	border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+	display: flex;
+	place-content: center;
+	place-items: center;
+	height: 100%;
 	text-align: center;
+	padding-bottom: 0.1rem;
 }
 
 .dih__hit-label {
@@ -49,7 +56,7 @@
 }
 
 .dih__ac-display {
-	background: rgb(0 0 0 / 0.2);
+	background: rgb(0 0 0/ 0.15);
 	border-radius: 50% 50% 50% 50% / 12% 12% 88% 88%;
 	display: flex;
 	place-content: center;

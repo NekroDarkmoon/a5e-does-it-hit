@@ -30,12 +30,11 @@ class DoesItHit {
 		if (!targets.length) return;
 
 		// Get hit data
-		const hitData = targets.map(t => this._checkHit(t, roll));
+		const critThreshold = item.data.data.attack.critThreshold;
+		const hitData = targets.map(t => this._checkHit(critThreshold, roll, t));
 		console.log(hitData);
 
-		// Construct Display data
-		const displayData = this._displayData(hitData);
-
+		// Construct Display Data
 		const html = `
 			<ul class="a5e-chat-card dih-card">
 			${this._displayData(hitData, roll)} 
@@ -58,11 +57,12 @@ class DoesItHit {
 
 	/**
 	 *
-	 * @param {*} token
+	 * @param {*} critThreshold
 	 * @param {*} roll
+	 * @param {*} token
 	 * @returns {}
 	 */
-	_checkHit(token, roll) {
+	_checkHit(critThreshold, roll, token) {
 		// Get AC
 		const ac = token.actor.data.data.attributes.ac;
 		const rollTotal = roll.total;
@@ -72,7 +72,7 @@ class DoesItHit {
 		const isCritHit =
 			d20.faces === 20 &&
 			d20.values.length === 1 &&
-			d20.total >= (d20.options.critical ?? 20);
+			d20.total >= (critThreshold ?? 20);
 
 		const isFumble =
 			d20.faces === 20 && d20.values.length === 1 && d20.total === 1;
