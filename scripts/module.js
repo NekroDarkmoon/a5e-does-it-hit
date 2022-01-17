@@ -42,12 +42,15 @@ class DoesItHit {
 		`;
 
 		const msgData = {
-			// whisper: ChatMessage.getWhisperRecipients('GM'),
 			blind: true,
-			user: game.user.data._id,
-			type: CONST.CHAT_MESSAGE_TYPES.OTHER,
-			speaker: ChatMessage.getSpeaker({ actor }),
 			content: html,
+			flavor: game.i18n.format(`${moduleName}.card-title`, {
+				name: actor.data.name,
+			}),
+			speaker: ChatMessage.getSpeaker({ actor }),
+			type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+			user: game.user.data._id,
+			// whisper: ChatMessage.getWhisperRecipients('GM'),
 		};
 
 		setTimeout(_ => ChatMessage.create(msgData), 0);
@@ -88,11 +91,11 @@ class DoesItHit {
 				const label =
 					isCritHit || isFumble
 						? isCritHit
-							? 'Critical'
-							: 'Fumble'
+							? game.i18n.localize(`${moduleName}.crit`)
+							: game.i18n.localize(`${moduleName}.fumble`)
 						: isHit
-						? 'Hits'
-						: 'Misses';
+						? game.i18n.localize(`${moduleName}.hit`)
+						: game.i18n.localize(`${moduleName}.miss`);
 
 				return `
 				<li class="dih__target">

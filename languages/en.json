@@ -1,3 +1,9 @@
 {
-    "MODULE.hello": "hello"
+  "does-it-hit-a5e": {
+    "card-title": "Attack Roll Results", 
+    "hit": "Hits",
+    "miss": "Misses",
+    "crit": "Critical",
+    "fumble": "Fumble"
+  }   
 }
