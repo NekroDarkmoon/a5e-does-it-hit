@@ -30,11 +30,14 @@ export class hitCheck {
 		const dmgData = hitData.map(h => this._getDmgData(h, item, _data));
 		console.log(dmgData);
 
-		// TODO: Move to constructCard
+		// Get Display html for each section
+		const hitDisplay = constructCard.hitCheck(hitData);
+		const dmgDisplay = constructCard.dmgDisplay(dmgData);
+
 		// Construct display Data
 		const html = `
 			<ul class="a5e-chat-card dih-card">
-			${constructCard.hitCheck(hitData)} 
+			${constructCard.mergeDisplayArrays(hitDisplay, dmgDisplay)}
 			</ul>
 		`;
 
@@ -70,29 +73,40 @@ export class hitCheck {
 		// Construct required vars
 		const { isHit, token } = hitData;
 		const dmgRolls = _data.damage;
-		const resistances = token.actor.data.data.traits.damageResistances;
-		const immunities = token.actor.data.data.traits.damageImmunities;
-		const vulnerabilities = token.actor.data.data.traits.damageVulnerabilities;
+		const dr = token.actor.data.data.traits.damageResistances;
+		const di = token.actor.data.data.traits.damageImmunities;
+		const dv = token.actor.data.data.traits.damageVulnerabilities;
 
-		// Perform resistance and immunity checks
-		const damageArray = dmgRolls.map(roll => {
-			return { total: roll.roll.total, type: roll.damageType };
-		});
+		// Create base damage array
+		const baseDamageArray = dmgRolls.map(d => ({
+			total: d.roll.total,
+			type: d.damageType,
+		}));
 
-		const appliedDamage = damageArray.map(dmg => {
+		// Get base damage value
+		const baseDamage = baseDamageArray.reduce((a, b) => a + b.total, 0);
+
+		// Create calculated damage array
+		const calcDamageArray = baseDamageArray.map(dmg => {
 			let value = dmg.total;
-			if (resistances.includes(dmg.type)) value = Math.floor(value / 2);
-			if (vulnerabilities.includes(dmg.type)) value = Math.floor(value * 2);
-			if (immunities.includes(dmg.type)) value = 0;
+			if (dr.includes(dmg.type)) value = Math.floor(value / 2);
+			if (dv.includes(dmg.type)) value = Math.floor(value * 2);
+			if (di.includes(dmg.type)) value = 0;
 
 			return { type: dmg.type, value };
 		});
 
-		const damage = appliedDamage.reduce((a, b) => a + b.value, 0);
-		const data = { appliedDamage, damage, isHit, token };
+		// Get Calculated damage value
+		const calcDamage = calcDamageArray.reduce((a, b) => a + b.value, 0);
 
-		// API Integration - Hook Callls
-		Hooks.call('dih-preDamageApply', data);
+		const data = {
+			baseDamage,
+			baseDamageArray,
+			calcDamageArray,
+			calcDamage,
+			isHit,
+			token,
+		};
 
 		return data;
 	}
