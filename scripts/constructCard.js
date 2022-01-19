@@ -68,7 +68,7 @@ export class constructCard {
 	 */
 	static dmgDisplay(dmgData) {
 		const data = dmgData.map(({ baseDamage, calcDamage, token }) => {
-			const hp = token.actor.data.data.attributes.hp.current;
+			const hp = token.actor.data.data.attributes.hp.value;
 			const newHp = hp - baseDamage < 0 ? 0 : hp - baseDamage;
 			const cNewHp = hp - calcDamage < 0 ? 0 : hp - calcDamage;
 			return `
