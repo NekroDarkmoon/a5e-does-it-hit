@@ -2,6 +2,7 @@
 //                               Imports and Constants
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 import { moduleName, moduleTag } from './scripts/constants.js';
+import { constructCard } from './scripts/constructCard.js';
 import { hitCheck } from './scripts/hitCheck.js';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -40,6 +41,8 @@ Hooks.on('renderChatMessage', async function (msg, $html) {
 	if (game.user.isGM) return;
 	if (msg.data.blind) $html.addClass('dih--hidden');
 });
+
+Hooks.on('renderChatLog', constructCard.registerListeners);
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                               Imports and Constants

@@ -79,16 +79,24 @@ export class constructCard {
 				</div>
 				
 				<select class="dih__mult-selector">
-					<option value="base">Base</option>
-					<option value="calc">Calc</option>
-					<option value="x0.5">1/2</option>
-					<option value="x2">2</option>
+					<option value="${baseDamage}">Base</option>
+					<option value="${calcDamage}">Calc</option>
+					<option value="${baseDamage * 0.5}">1/2</option>
+					<option value="${baseDamage * 2}">2</option>
 				</select>
 
-				<button type=button class="dih__button" id="dih--apply">
+				<button 
+					class="dih__button dih__apply" 
+					data-token-id="${token.id}"
+				>
 					<i class="fas fa-check"></i>
 				</button> 
-				<button type=button class="dih__button" id="dih--reset">
+
+				<button 
+					class="dih__button dih__reset" 
+					data-token-id="${token.id}"
+					data-applied="false"
+				>
 					<i class="fas fa-undo"></i>
 				</button> 
 			</li>
@@ -116,6 +124,41 @@ export class constructCard {
 		setTimeout(async _ => {
 			return await ChatMessage.create(msgData);
 		}, 0);
+	}
+
+	static registerListeners(_chatLog, $html) {
+		$html.on('click', '.dih__apply', constructCard._onApplyDamage);
+	}
+
+	static async _onApplyDamage(e) {
+		// console.log(e.currentTarget);
+		e.preventDefault();
+
+		const target = e.currentTarget;
+		const token = canvas.scene.tokens.get(target.dataset.tokenId);
+		const damage = e.currentTarget.previousElementSibling.value;
+		console.log(token);
+		console.log(damage);
+
+		// Check if temp hp exists
+		const tHp = token.actor.data.data.attributes.hp.temp ?? 0;
+		const hp = token.actor.data.data.attributes.hp.current;
+
+		let appliedDamage = tHp < 1 ? 0 : Math.min(tHp, damage);
+		const newTHp = tHp - appliedDamage;
+		const newHp = hp - (damage - appliedDamage);
+
+		console.log(newTHp);
+		console.log(newHp);
+
+		// Apply damage and update dataset of the reset button
+		await token.actor.update({
+			'data.attributes.hp.temp': newTHp,
+			'data.attributes.hp.current': newHp,
+		});
+
+		e.currentTarget.nextElementSibling.dataset.damage = damage;
+		target.disabled = true;
 	}
 }
 

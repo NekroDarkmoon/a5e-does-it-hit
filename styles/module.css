@@ -67,10 +67,12 @@
 }
 
 .dih__hit-label--crit:after {
-	content: 'Crit';
+	content: 'crit';
 	position: absolute;
-	bottom: 0;
-	font-size: 0.579rem;
+	bottom: -2px;
+	font-size: 0.694rem;
+	font-family: 'Modesto Condensed';
+	text-transform: lowercase;
 }
 
 .dih__hit-label--fumble {
@@ -79,10 +81,12 @@
 }
 
 .dih__hit-label--fumble:after {
-	content: 'Fumble';
+	content: 'fumble';
 	position: absolute;
-	bottom: 0;
-	font-size: 0.579rem;
+	bottom: -2px;
+	font-family: 'Modesto Condensed';
+	font-size: 0.694rem;
+	text-transform: lowercase;
 }
 
 .dih__ac-display {
