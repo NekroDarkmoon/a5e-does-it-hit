@@ -27,7 +27,7 @@ export class hitCheck {
 		// console.log(hitData);
 
 		// Get Damage Data
-		const dmgData = hitData.map(h => this._getDmgData(h, item, _data));
+		const dmgData = hitData.map(h => this._getDmgData(h, _data));
 		// console.log(dmgData);
 
 		// Get Display html for each section
