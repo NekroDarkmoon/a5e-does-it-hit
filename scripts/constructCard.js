@@ -138,25 +138,7 @@ export class constructCard {
 		const target = e.currentTarget;
 		const token = canvas.scene.tokens.get(target.dataset.tokenId);
 		const damage = e.currentTarget.previousElementSibling.value;
-		console.log(token);
 		console.log(damage);
-
-		// Check if temp hp exists
-		const tHp = token.actor.data.data.attributes.hp.temp ?? 0;
-		const hp = token.actor.data.data.attributes.hp.current;
-
-		let appliedDamage = tHp < 1 ? 0 : Math.min(tHp, damage);
-		const newTHp = tHp - appliedDamage;
-		const newHp = hp - (damage - appliedDamage);
-
-		console.log(newTHp);
-		console.log(newHp);
-
-		// Apply damage and update dataset of the reset button
-		await token.actor.update({
-			'data.attributes.hp.temp': newTHp,
-			'data.attributes.hp.current': newHp,
-		});
 
 		console.log(
 			`${moduleTag} | Applied ${damage} damage to ${token.data.name}`
@@ -187,9 +169,6 @@ export class constructCard {
 	}
 }
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                               Imports and Constants
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                               Imports and Constants
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
