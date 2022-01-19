@@ -23,12 +23,12 @@ export class hitCheck {
 		if (!targets.length) return;
 
 		// Get Hit Data
-		const hitData = targets.map(t => this._getHitData(item, roll, t));
-		console.log(hitData);
+		const hitData = targets.map(t => this._getHitData(actor, item, roll, t));
+		// console.log(hitData);
 
 		// Get Damage Data
 		const dmgData = hitData.map(h => this._getDmgData(h, item, _data));
-		console.log(dmgData);
+		// console.log(dmgData);
 
 		// Get Display html for each section
 		const hitDisplay = constructCard.hitCheck(hitData);
@@ -45,7 +45,7 @@ export class hitCheck {
 		constructCard.toMessage(actor, html);
 	}
 
-	_getHitData(i, r, t) {
+	_getHitData(a, i, r, t) {
 		// Construct Required Vars
 		const ac = t.actor.data.data.attributes.ac;
 		const rollTotal = r.total;
@@ -56,6 +56,11 @@ export class hitCheck {
 		const isFumble = d20.faces === 20 && d20.total === 1;
 
 		const isHit = !isFumble && (isCrit || rollTotal >= ac);
+		console.info(
+			`${moduleTag} | ${a.name} ${isHit ? 'hits' : 'misses'} ${
+				t.data.name
+			} with a ${rollTotal}`
+		);
 
 		const data = { ac, isCrit, isFumble, isHit, rollTotal, token: t };
 
@@ -68,8 +73,7 @@ export class hitCheck {
 		return data;
 	}
 
-	//
-	_getDmgData(hitData, item, _data) {
+	_getDmgData(hitData, _data) {
 		// Construct required vars
 		const { isHit, token } = hitData;
 		const dmgRolls = _data.damage;
@@ -111,11 +115,3 @@ export class hitCheck {
 		return data;
 	}
 }
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                               Imports and Constants
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                               Imports and Constants
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

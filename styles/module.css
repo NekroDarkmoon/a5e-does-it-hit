@@ -15,7 +15,7 @@
 .dih__target-display {
 	padding-block: 0.25rem;
 	display: grid;
-	grid-template-columns: 2.5rem 1fr 4ch 4ch;
+	grid-template-columns: 2rem 1fr 4ch 4ch;
 	align-items: center;
 	gap: 0.3rem;
 }
@@ -30,19 +30,14 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
-}
-
-.dih--hidden {
-	display: none !important;
+	font-size: 0.833rem;
 }
 
 .dih__roll-display {
-	/* 	background: rgb(0 0 0 / 0.15); */
 	background-image: url('/icons/svg/d20-grey.svg');
 	background-repeat: no-repeat;
 	background-size: 4ch 4ch;
 	font-weight: bold;
-	border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
 	display: flex;
 	place-content: center;
 	place-items: center;
@@ -107,6 +102,10 @@
 	align-items: center;
 }
 
+.dih__dmg-values > p {
+	font-size: 0.833rem;
+}
+
 .dih__mult-selector {
 	height: 1.5rem;
 }
@@ -115,4 +114,8 @@
 	display: flex;
 	height: 1.5rem;
 	align-items: center;
+}
+
+.dih--hidden {
+	display: none !important;
 }

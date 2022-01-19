@@ -96,6 +96,7 @@ export class constructCard {
 					class="dih__button dih__reset" 
 					data-token-id="${token.id}"
 					data-applied="false"
+					disabled
 				>
 					<i class="fas fa-undo"></i>
 				</button> 
@@ -114,7 +115,6 @@ export class constructCard {
 		const msgData = {
 			blind: true,
 			content: displayData,
-			flavor: game.i18n.localize(`${moduleName}.card-title`),
 			speaker: ChatMessage.getSpeaker({ actor }),
 			type: CONST.CHAT_MESSAGE_TYPES.OTHER,
 			user: game.user.data._id,
@@ -127,11 +127,12 @@ export class constructCard {
 	}
 
 	static registerListeners(_chatLog, $html) {
+		// Damage listeners
 		$html.on('click', '.dih__apply', constructCard._onApplyDamage);
+		$html.on('click', '.dih__reset', constructCard._onResetDamage);
 	}
 
 	static async _onApplyDamage(e) {
-		// console.log(e.currentTarget);
 		e.preventDefault();
 
 		const target = e.currentTarget;
@@ -157,7 +158,31 @@ export class constructCard {
 			'data.attributes.hp.current': newHp,
 		});
 
-		e.currentTarget.nextElementSibling.dataset.damage = damage;
+		console.log(
+			`${moduleTag} | Applied ${damage} damage to ${token.data.name}`
+		);
+
+		target.nextElementSibling.dataset.damage = damage;
+		target.nextElementSibling.disabled = false;
+		target.disabled = true;
+	}
+
+	static async _onResetDamage(e) {
+		e.preventDefault();
+
+		const target = e.currentTarget;
+		const token = canvas.scene.tokens.get(target.dataset.tokenId);
+		const damage = e.currentTarget.dataset.damage;
+
+		if (!damage)
+			return ui.notifications.error(
+				`${moduleTag} | Unable to fetch applied damage.`
+			);
+
+		// Use new function
+
+		// Update buttons
+		target.previousElementSibling.disabled = false;
 		target.disabled = true;
 	}
 }
