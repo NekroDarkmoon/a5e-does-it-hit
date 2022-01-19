@@ -15,6 +15,11 @@
       "ko-fi": "https://ko-fi.com/nekrodarkmoon"
     }
   ],
+  "dependencies": {
+    "name": "a5e",
+    "manifest": "https://raw.githubusercontent.com/Pjb518/FoundryVTT-Level-Up-Official/main/public/system.json",
+    "type": "system"
+  },
   "esmodules": [
     "./index.js"
   ],
