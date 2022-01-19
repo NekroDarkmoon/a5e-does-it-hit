@@ -140,7 +140,9 @@ export class constructCard {
 		const damage = e.currentTarget.previousElementSibling.value;
 		console.log(damage);
 
-		console.log(
+		token.actor.applyDamage(damage);
+
+		console.info(
 			`${moduleTag} | Applied ${damage} damage to ${token.data.name}`
 		);
 
@@ -162,6 +164,10 @@ export class constructCard {
 			);
 
 		// Use new function
+		token.actor.applyHealing(damage);
+		console.info(
+			`${moduleTag} | Removed ${damage} damage from ${token.data.name}`
+		);
 
 		// Update buttons
 		target.previousElementSibling.disabled = false;
