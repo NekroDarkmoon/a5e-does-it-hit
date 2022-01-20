@@ -11,4 +11,8 @@
 
 This module will be feature complete once the following functionality has been implemented, at which point it will only be in maintenance mode.
 
+- Template Creation.
+- Template Targeting.
+- Mass NPC saving throws
+
 ![](./imgs/hit-card.png)

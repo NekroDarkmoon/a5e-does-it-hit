@@ -6,7 +6,7 @@
   "library": "false",
   "manifestPlusVersion": "1.0.0",
   "minimumCoreVersion": "9",
-  "minimumSystemVersion": "0.2.3",
+  "minimumSystemVersion": "0.3.0",
   "compatibleCoreVersion": "9",
   "authors": [
     {
