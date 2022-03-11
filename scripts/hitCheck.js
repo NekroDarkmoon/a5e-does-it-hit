@@ -9,7 +9,7 @@ import { constructCard } from './constructCard.js';
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 export class hitCheck {
 	constructor() {
-		Hooks.on('attackRoll', this._hitHandler.bind(this));
+		Hooks.on('dih-attackRoll', this._hitHandler.bind(this));
 	}
 
 	_hitHandler(item, roll, actor, _data) {

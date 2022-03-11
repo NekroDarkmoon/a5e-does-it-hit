@@ -4,7 +4,8 @@
 import { moduleName, moduleTag } from './scripts/constants.js';
 import { constructCard } from './scripts/constructCard.js';
 import { hitCheck } from './scripts/hitCheck.js';
-import { saveAuto } from './scripts/saveAutomation.js';
+// import { saveAuto } from './scripts/saveAutomation.js';
+import { healAutomation } from './scripts/healAutomation/js';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                     Main Hooks
@@ -24,6 +25,7 @@ Hooks.once('setup', async function () {
 Hooks.once('ready', async function () {
 	// Enable Hit Check and damage application
 	new hitCheck();
+	new healAutomation();
 	new saveAuto();
 
 	console.log(`${moduleTag} | Ready.`);
@@ -54,17 +56,17 @@ function dummyHook(wrapped, data) {
 	const item = actor.items.get(data.id);
 	if (data.actionOptions?.includes('attack')) {
 		const roll = data.attack.roll;
-		Hooks.call('attackRoll', item, roll, actor, data);
+		Hooks.call('dih-attackRoll', item, roll, actor, data);
 	}
 
-	if (data.actionOptions?.includes('savingThrow')) {
-		const save = data.savingThrow;
-		Hooks.call('saveItemRolled', item, save, actor, data);
-	}
+	// if (data.actionOptions?.includes('savingThrow')) {
+	// 	const save = data.savingThrow;
+	// 	Hooks.call('dih-saveItemRolled', item, save, actor, data);
+	// }
 
 	if (data.actionOptions?.includes('healing')) {
 		const heal = data.healing;
-		Hooks.call('healingItemRolled', item, heal, actor, data);
+		Hooks.call('dih-healingItemRolled', item, heal, actor, data);
 	}
 
 	return wrapped(data);

@@ -10,7 +10,7 @@ import { constructCard } from './constructCard.js';
 export class saveAuto {
 	constructor() {
 		Hooks.on('', this._onPlaceTemplate.bind(this));
-		Hooks.on('saveItemRolled', this._onUseSaveItem.bind(this));
+		Hooks.on('dih-saveItemRolled', this._onUseSaveItem.bind(this));
 	}
 
 	_onPlaceTemplate() {}
