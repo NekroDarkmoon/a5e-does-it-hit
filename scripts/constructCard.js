@@ -81,8 +81,9 @@ export class constructCard {
 				<select class="dih__mult-selector">
 					<option value="${baseDamage}">Base</option>
 					<option value="${calcDamage}">Calc</option>
-					<option value="${baseDamage * 0.5}">1/2</option>
 					<option value="${baseDamage * 2}">2</option>
+					<option value="${baseDamage * 0.5}">1/2</option>
+					<option value="${baseDamage * 0.25}">1/4</option>
 				</select>
 
 				<button 
@@ -137,10 +138,8 @@ export class constructCard {
 
 		const target = e.currentTarget;
 		const token = canvas.scene.tokens.get(target.dataset.tokenId);
-		const damage = e.currentTarget.previousElementSibling.value;
-		console.log(damage);
-
-		token.actor.applyDamage(damage);
+		const damage = Math.floor(e.currentTarget.previousElementSibling.value);
+		await token.actor.applyDamage(damage);
 
 		console.info(
 			`${moduleTag} | Applied ${damage} damage to ${token.data.name}`
@@ -156,15 +155,18 @@ export class constructCard {
 
 		const target = e.currentTarget;
 		const token = canvas.scene.tokens.get(target.dataset.tokenId);
-		const damage = e.currentTarget.dataset.damage;
+		const damage = Number(e.currentTarget.dataset.damage);
 
 		if (!damage)
 			return ui.notifications.error(
 				`${moduleTag} | Unable to fetch applied damage.`
 			);
 
-		// Use new function
-		token.actor.applyHealing(damage);
+		// Sanitize Hp
+		const { value, max } = token.actor.data.data.attributes.hp;
+		const hp = Math.clamped(value + damage, value, max);
+
+		await token.actor.update({ 'data.attributes.hp.value': hp });
 		console.info(
 			`${moduleTag} | Removed ${damage} damage from ${token.data.name}`
 		);
