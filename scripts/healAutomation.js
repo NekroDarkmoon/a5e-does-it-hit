@@ -22,7 +22,7 @@ export class healAutomation {
 		// Construct Heal data
 		const healData = heal.reduce(
 			(a, b) => {
-				a.heal = b.healingType === 'healing' ? b.roll.total : 0;
+				a.heal += b.healingType === 'healing' ? b.roll.total : 0;
 				a.tempHeal += b.healingType === 'temporaryHealing' ? b.roll.total : 0;
 				return a;
 			},
@@ -30,13 +30,14 @@ export class healAutomation {
 		);
 
 		// Construct display Data
-		const html = `
+		const displayData = constructCard.healDisplay(targets, healData);
+		let html = `
 			<ul class="a5e-chat-card dih-card">
-				${constructCard.healDisplay(targets, healData)}
+				${displayData}
 			</ul>
 			<div class="dih__apply-all ${targets.length > 1 ? '' : 'dih--hidden'}">
 				<button
-					class="dih__button dih__heal-apply"
+					class="dih__button dih__heal-apply-all"
 					data-tokens="${targets.map(t => t.id).join('-')}"
 					data-amt="${healData.heal}"
 				>
@@ -44,7 +45,7 @@ export class healAutomation {
 				</button>
 
 				<button
-					class="dih__button dih__temp-apply"
+					class="dih__button dih__temp-apply-all"
 					data-tokens="${targets.map(t => t.id).join('-')}"
 					data-amt="${healData.tempHeal}"
 				>
@@ -52,6 +53,8 @@ export class healAutomation {
 				</button>
 			</div>
 		`;
+
+		if (displayData === '') html = 'Everyone is topped up.';
 
 		constructCard.toMessage(actor, html);
 	}

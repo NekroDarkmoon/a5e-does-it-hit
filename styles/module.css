@@ -125,21 +125,40 @@
 	gap: 0.4rem;
 }
 
+.dih__apply-all {
+	padding-block: 0.25rem;
+	float: right;
+
+	display: grid;
+	grid-template-columns: max-content max-content;
+	align-items: center;
+	gap: 0.4rem;
+}
+
 .dih__heal-display > .dih--tooltip-container {
 	position: relative;
 	width: 100%;
 }
 
-.dih__heal-apply {
+.dih__heal-apply,
+.dih__heal-apply-all {
 	color: white;
 	background: #18520b;
 	font-size: 0.833rem;
 }
 
-.dih__temp-apply {
+.dih__temp-apply,
+.dih__temp-apply-all {
 	color: white;
 	background: #0b3152;
 	font-size: 0.833rem;
+}
+
+.dih__heal-apply:disabled,
+.dih__heal-apply-all:disabled,
+.dih__temp-apply:disabled,
+.dih__temp-apply-all:disabled {
+	all: revert;
 }
 
 .dih__heal-apply[title]:hover::after,
@@ -154,16 +173,6 @@
 	padding-inline: 0.5rem;
 	border-radius: 0.3rem;
 	color: white;
-}
-
-.dih__apply-all {
-	padding-block: 0.25rem;
-	float: right;
-
-	display: grid;
-	grid-template-columns: max-content max-content;
-	align-items: center;
-	gap: 0.4rem;
 }
 
 .dih__button {

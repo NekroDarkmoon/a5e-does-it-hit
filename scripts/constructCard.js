@@ -117,7 +117,13 @@ export class constructCard {
 		const data = targets.map(t => {
 			const { value, max, temp } = t.actor.data.data.attributes.hp;
 			const newHp = Math.clamped(value + healData.heal, value, max);
-			const newTemp = temp ? temp + healData.tempHeal : 0;
+			const newTemp = temp
+				? healData.tempHeal >= temp
+					? healData.tempHeal
+					: temp
+				: healData.tempHeal;
+
+			if (value === newHp && newTemp === temp) return '';
 
 			return `
 			<li class="dih__heal-display">
@@ -135,7 +141,7 @@ export class constructCard {
 					class="dih__button dih__heal-apply ${newHp === value ? 'dih--hidden' : ''}"
 					title="${value}/${max} 🠖 ${newHp}/${max}"
 					data-token-id="${t.id}"
-					data-amt="${newHp}"
+					data-amt="${healData.heal}"
 				>
 					<i class="fas fa-heart"> Heal</i>
 				</button>
@@ -146,7 +152,7 @@ export class constructCard {
 					class="dih__button dih__temp-apply ${temp === newTemp ? 'dih--hidden' : ''}"
 					title="${temp ? temp : 0} 🠖 ${newTemp}"
 					data-token-id="${t.id}"
-					data-amt="${newHp}"
+					data-amt="${healData.tempHeal}"
 				>
 					<i class="fas fa-plus"> Temp</i>
 				</button>
@@ -182,6 +188,12 @@ export class constructCard {
 		// Damage listeners
 		$html.on('click', '.dih__apply', constructCard._onApplyDamage);
 		$html.on('click', '.dih__reset', constructCard._onResetDamage);
+
+		// Heal Listeners
+		$html.on('click', '.dih__heal-apply', constructCard._onApplyHeal);
+		$html.on('click', '.dih__temp-apply', constructCard._onApplyTemp);
+		$html.on('click', '.dih__heal-apply-all', constructCard._onApplyHealMulti);
+		$html.on('click', '.dih__temp-apply-all', constructCard._onApplyTempMulti);
 	}
 
 	static async _onApplyDamage(e) {
@@ -225,6 +237,98 @@ export class constructCard {
 		// Update buttons
 		target.previousElementSibling.disabled = false;
 		target.disabled = true;
+	}
+
+	static async _onApplyHeal(e) {
+		e.preventDefault();
+
+		const $div = e.currentTarget;
+		const token = canvas.scene.tokens.get($div.dataset.tokenId);
+		const healing = Number($div.dataset.amt);
+
+		// Apply Healing
+		if (token && healing) {
+			await token.actor.applyHealing(healing);
+			console.log(
+				`${moduleTag} | ${token.data.name} healed for ${healing} points.`
+			);
+		}
+
+		// Disable
+		$div.disabled = true;
+	}
+
+	static async _onApplyTemp(e) {
+		e.preventDefault();
+
+		const $div = e.currentTarget;
+		const token = canvas.scene.tokens.get($div.dataset.tokenId);
+		const healing = Number($div.dataset.amt);
+
+		// Apply Healing
+		if (token && healing) {
+			await token.actor.applyHealing(healing, { temp: true });
+			console.log(
+				`${moduleTag} | Applied ${healing} temp hp to ${token.data.name}`
+			);
+		}
+		$div.disabled = true;
+	}
+
+	static async _onApplyHealMulti(e) {
+		e.preventDefault();
+
+		const $div = e.currentTarget;
+		const tokens = $div.dataset.tokens
+			.split('-')
+			.map(t => canvas.scene.tokens.get(t));
+
+		const healing = Number($div.dataset.amt);
+
+		// Apply healing
+		tokens.forEach(async t => {
+			if (t && healing) await t.actor.applyHealing(healing);
+			console.log(
+				`${moduleTag} | ${t.data.name} healed for ${healing} points.`
+			);
+		});
+
+		// Disable
+		$div.disabled = true;
+		const $ul =
+			$div.parentElement.previousElementSibling.querySelectorAll(
+				'.dih__heal-apply'
+			);
+
+		$ul.forEach(btn => (btn.disabled = true));
+	}
+
+	static async _onApplyTempMulti(e) {
+		e.preventDefault();
+
+		const $div = e.currentTarget;
+		const tokens = $div.dataset.tokens
+			.split('-')
+			.map(t => canvas.scene.tokens.get(t));
+
+		const healing = Number($div.dataset.amt);
+
+		// Apply healing
+		tokens.forEach(async t => {
+			if (t && healing) await t.actor.applyHealing(healing, { temp: true });
+			console.log(
+				`${moduleTag} | Applied ${healing} temp hp to ${t.data.name}`
+			);
+		});
+
+		// Disable
+		$div.disabled = true;
+		const $ul =
+			$div.parentElement.previousElementSibling.querySelectorAll(
+				'.dih__temp-apply'
+			);
+
+		$ul.forEach(btn => (btn.disabled = true));
 	}
 }
 
