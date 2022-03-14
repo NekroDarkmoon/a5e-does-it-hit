@@ -1,8 +1,11 @@
 # Does it Hit?! (A5E)
 
-# WARNING! THIS MODULE CAN AND WILL BREAK.
+![](https://shields.io/badge/Foundry-v9-informational)
+![Latest Release Download Count](https://img.shields.io/github/downloads/NekroDarkmoon/does-it-hit-a5e/latest/module.zip)
+![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2F<does-it-hit-a5e>&colorB=4aa94a)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E152DVK)
 
-"Does it Hit?!" is part of a suite of modules that aim to provide basic automation for the A5E system. This module automates hit checking, damage application, template targeting, and mass saving throws for NPCs.
+"Does it Hit?!" is part of a suite of modules that aim to provide basic automation for the A5E system. This module automates hit checking, damage application, heal application.
 
 ### Notes
 
@@ -11,8 +14,7 @@
 
 This module will be feature complete once the following functionality has been implemented, at which point it will only be in maintenance mode.
 
-- Template Creation.
-- Template Targeting.
 - Mass NPC saving throws
 
 ![](./imgs/hit-card.png)
+![](./imgs//heal-card.png)
