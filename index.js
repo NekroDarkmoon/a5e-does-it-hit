@@ -5,7 +5,7 @@ import { moduleName, moduleTag } from './scripts/constants.js';
 import { constructCard } from './scripts/constructCard.js';
 import { hitCheck } from './scripts/hitCheck.js';
 // import { saveAuto } from './scripts/saveAutomation.js';
-// import { healAutomation } from './scripts/healAutomation.js';
+import { healAutomation } from './scripts/healAutomation.js';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                     Main Hooks
@@ -25,7 +25,7 @@ Hooks.once('setup', async function () {
 Hooks.once('ready', async function () {
 	// Enable Hit Check and damage application
 	new hitCheck();
-	// new healAutomation();
+	new healAutomation();
 	// new saveAuto();
 
 	console.log(`${moduleTag} | Ready.`);

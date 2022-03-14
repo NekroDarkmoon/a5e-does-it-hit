@@ -109,6 +109,57 @@ export class constructCard {
 	}
 
 	/**
+	 * @param {*} targets
+	 * @param {*} healData
+	 * @returns
+	 */
+	static healDisplay(targets, healData) {
+		const data = targets.map(t => {
+			const { value, max, temp } = t.actor.data.data.attributes.hp;
+			const newHp = Math.clamped(value + healData.heal, value, max);
+			const newTemp = temp ? temp + healData.tempHeal : 0;
+
+			return `
+			<li class="dih__heal-display">
+				<img 
+					class="dih__img-display"
+					src="${t.data.img}"
+					title="${t.data.name}"
+					width="30px"
+					height=30px"
+				/>
+				<h3 class="dih__h3">${t.data.name}</h3>
+
+				<div class="dih--tooltip-container">
+				<button
+					class="dih__button dih__heal-apply ${newHp === value ? 'dih--hidden' : ''}"
+					title="${value}/${max} 🠖 ${newHp}/${max}"
+					data-token-id="${t.id}"
+					data-amt="${newHp}"
+				>
+					<i class="fas fa-heart"> Heal</i>
+				</button>
+				</div>
+
+				<div class="dih--tooltip-container">
+				<button
+					class="dih__button dih__temp-apply ${temp === newTemp ? 'dih--hidden' : ''}"
+					title="${temp ? temp : 0} 🠖 ${newTemp}"
+					data-token-id="${t.id}"
+					data-amt="${newHp}"
+				>
+					<i class="fas fa-plus"> Temp</i>
+				</button>
+				</div>
+
+			</li>
+			`;
+		});
+
+		return data.join('');
+	}
+
+	/**
 	 * @param {*} actor
 	 * @param {*} displayData
 	 */

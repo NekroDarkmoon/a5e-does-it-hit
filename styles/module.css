@@ -7,11 +7,17 @@
 	padding-block-start: 0.5rem;
 }
 
-.dih-card > .dih__damage-display:not(:last-child) {
-	padding-block-end: 0.75rem;
+.dih-card > .dih__damage-display {
+	padding-block-end: 0.5rem;
 	border-bottom: 1px solid grey;
 }
 
+.dih-card > .dih__heal-display {
+	padding-block: 0.5rem;
+	border-bottom: 1px solid grey;
+}
+
+/* Hit Check Display */
 .dih__target-display {
 	padding-block: 0.25rem;
 	display: grid;
@@ -108,6 +114,56 @@
 
 .dih__mult-selector {
 	height: 1.5rem;
+}
+
+/* Heal display */
+.dih__heal-display {
+	padding-block: 0.25rem;
+	display: grid;
+	grid-template-columns: 2rem 1fr max-content max-content;
+	align-items: center;
+	gap: 0.4rem;
+}
+
+.dih__heal-display > .dih--tooltip-container {
+	position: relative;
+	width: 100%;
+}
+
+.dih__heal-apply {
+	color: white;
+	background: #18520b;
+	font-size: 0.833rem;
+}
+
+.dih__temp-apply {
+	color: white;
+	background: #0b3152;
+	font-size: 0.833rem;
+}
+
+.dih__heal-apply[title]:hover::after,
+.dih__temp-apply[title]:hover::after {
+	content: attr(title);
+	position: absolute;
+	width: max-content;
+	top: -2.5rem;
+	left: 0;
+
+	background-color: rgb(0 0 0 / 0.75);
+	padding-inline: 0.5rem;
+	border-radius: 0.3rem;
+	color: white;
+}
+
+.dih__apply-all {
+	padding-block: 0.25rem;
+	float: right;
+
+	display: grid;
+	grid-template-columns: max-content max-content;
+	align-items: center;
+	gap: 0.4rem;
 }
 
 .dih__button {

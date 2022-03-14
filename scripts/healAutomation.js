@@ -9,7 +9,51 @@ import { constructCard } from './constructCard.js';
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 export class healAutomation {
 	constructor() {
-		Hook.on('dih-healingItemRolled');
+		Hooks.on('dih-healingItemRolled', this._healHandler.bind(this));
+	}
+
+	_healHandler(item, heal, actor, _data) {
+		// Get Targets
+		const targets = [...(game.user.targets?.values() ?? [])].filter(
+			t => !!t.actor
+		);
+		if (!targets.length) return;
+
+		// Construct Heal data
+		const healData = heal.reduce(
+			(a, b) => {
+				a.heal = b.healingType === 'healing' ? b.roll.total : 0;
+				a.tempHeal += b.healingType === 'temporaryHealing' ? b.roll.total : 0;
+				return a;
+			},
+			{ heal: 0, tempHeal: 0 }
+		);
+
+		// Construct display Data
+		const html = `
+			<ul class="a5e-chat-card dih-card">
+				${constructCard.healDisplay(targets, healData)}
+			</ul>
+			<div class="dih__apply-all ${targets.length > 1 ? '' : 'dih--hidden'}">
+				<button
+					class="dih__button dih__heal-apply"
+					data-tokens="${targets.map(t => t.id).join('-')}"
+					data-amt="${healData.heal}"
+				>
+					<i class="fas fa-heart"> Heal All</i>
+				</button>
+
+				<button
+					class="dih__button dih__temp-apply"
+					data-tokens="${targets.map(t => t.id).join('-')}"
+					data-amt="${healData.tempHeal}"
+				>
+					<i class="fas fa-plus"> Temp All</i>
+				</button>
+			</div>
+		`;
+
+		constructCard.toMessage(actor, html);
 	}
 }
 
