@@ -34,6 +34,7 @@
   "styles": [
     "/styles/module.css"
   ],
+  "system": ["a5e"],
   "languages": [
     {
       "lang": "en",
