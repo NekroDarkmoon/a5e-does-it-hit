@@ -1,13 +1,16 @@
 {
-  "name": "does-it-hit-a5e",
+  "id": "bulk-tasks",
   "title": "Does it Hit?! (A5E)",
   "description": "",
   "version": "This is auto replaced",
   "library": "false",
   "manifestPlusVersion": "1.0.0",
-  "minimumCoreVersion": "9",
+  "compatibility": {
+    "minimum": 10,
+    "verified": 10,
+    "maximum": 10
+  },
   "minimumSystemVersion": "0.3.0",
-  "compatibleCoreVersion": "9",
   "authors": [
     {
       "name": "NekroDarkmoon",
@@ -16,17 +19,22 @@
       "ko-fi": "https://ko-fi.com/nekrodarkmoon"
     }
   ],
-  "dependencies": [
-    {
-    "name": "a5e",
-    "manifest": "https://raw.githubusercontent.com/Pjb518/FoundryVTT-Level-Up-Official/main/public/system.json",
-    "type": "system"
-    },
-    {
-      "name": "lib-wrapper",
+  
+  "relationships": {
+    "systems": [{
+      "id": "a5e",
+      "type": "system",
+      "manifest": "https://raw.githubusercontent.com/Pjb518/FoundryVTT-Level-Up-Official/main/public/system.json",
+      "compatibility": {
+        "minimum": "0.8.0"
+      }
+    }],
+    "requires": [{
+      "id": "lib-wrapper",
       "type": "module"
-    }
-  ],
+    }]
+  },
+
   "esmodules": [
     "./index.js"
   ],
@@ -50,5 +58,9 @@
       "type": "icon",
       "url": "https://avatars2.githubusercontent.com/u/71292812?s=400&u=ccdb4eeb7abf551ca8f314e5a9bfd0479a4d3d41&v=4"
     }
-  ]
+  ],
+
+  "name": "bulk-tasks",
+  "minimumCoreVersion": "10",
+  "compatibleCoreVersion": "10"
 }
