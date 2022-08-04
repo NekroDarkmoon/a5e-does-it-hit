@@ -1,0 +1,15 @@
+# IDE
+.idea/
+.nova/
+.vs/
+
+# Node Modules
+node_modules/
+dist/
+public/packs/*.db
+
+# OS Specific
+.DS_Store
+
+*.zip
+.vite-cache/*

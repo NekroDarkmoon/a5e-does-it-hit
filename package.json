@@ -1,0 +1,32 @@
+{
+  "name": "does-it-hit-a5e",
+  "version": "1.0.0",
+  "description": "![](https://shields.io/badge/Foundry-v9-informational)\r ![Latest Release Download Count](https://img.shields.io/github/downloads/NekroDarkmoon/does-it-hit-a5e/latest/module.zip)\r [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fdoes-it-hit-a5e&colorB=4aa94a)](https://forge-vtt.com/bazaar#package=does-it-hit-a5e)",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NekroDarkmoon/does-it-hit-a5e.git"
+  },
+  "dependencies": {
+    "@typhonjs-fvtt/runtime": "^0.0.18",
+    "@typhonjs-fvtt/svelte-standard": "^0.0.6",
+    "svelte": "^3.49.0"
+  },
+  "devDependencies": {
+    "@typhonjs-config/eslint-config": "^0.3.0",
+    "@typhonjs-fvtt/eslint-config-foundry.js": "^0.8.0",
+    "eslint": "^8",
+    "svelte-preprocess": "^4.10.0",
+    "vite": "^3"
+  },
+  "author": "NekroDarkmoon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NekroDarkmoon/does-it-hit-a5e/issues"
+  },
+  "homepage": "https://github.com/NekroDarkmoon/does-it-hit-a5e#readme"
+}
