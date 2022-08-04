@@ -12,7 +12,7 @@ export class hitCheck {
 		Hooks.on('dih-attackRoll', this._handler.bind(this));
 	}
 
-	_handler(item, roll, actor, _data) {
+	async _handler(item, roll, actor, _data) {
 		if (roll.options?.rollMode === 'selfRoll') return;
 
 		// Get Targets
@@ -27,6 +27,18 @@ export class hitCheck {
 		console.log(hitData);
 		const dmgData = hitData.map(i => this._dmgData(i, _data));
 		console.log(dmgData);
+
+		// Construct dynamic card
+		const msgData = {
+			blind: true,
+			speaker: ChatMessage.getSpeaker({ actor }),
+			user: game.user.id,
+		};
+
+		setTimeout(async _ => {
+			const message = await ChatMessage.create(msgData);
+			await message.setFlag(moduleName, 'data', { hitData, dmgData });
+		}, 0);
 	}
 
 	_hitData(actor, item, roll, target) {
@@ -46,12 +58,13 @@ export class hitCheck {
 			} with a ${rollTotal}`
 		);
 
-		return { ac, isCrit, isFumble, isHit, rollTotal, token: target };
+		return { ac, isCrit, isFumble, isHit, rollTotal, tokenId: target.id };
 	}
 
 	_dmgData(hitData, _data) {
 		// Variables
-		const { isHit, token } = hitData;
+		const { isHit, tokenId } = hitData;
+		const token = canvas.scene.tokens.get(tokenId);
 		const dmgRolls = _data.damage;
 		const dr = token.actor.system.traits.damageResistances;
 		const di = token.actor.system.traits.damageImmunities;
@@ -85,7 +98,7 @@ export class hitCheck {
 			calcDamageArray,
 			calcDamage,
 			isHit,
-			token,
+			tokenId: tokenId,
 		};
 	}
 }

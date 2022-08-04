@@ -5,6 +5,7 @@ import { moduleName, moduleTag } from './modules/constants.js';
 import { constructCard } from './modules/constructCard.js';
 import { hitCheck } from './modules/hitCheck.js';
 import { healAutomation } from './modules/healAutomation.js';
+import HitChatMessage from './modules/apps/HitChatMessage.svelte';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                     Main Hooks
@@ -44,7 +45,13 @@ Hooks.on('renderChatMessage', async function (msg, $html) {
 	if (msg.data.blind) $html.addClass('dih--hidden');
 });
 
-Hooks.on('renderChatLog', constructCard.registerListeners);
+// Hooks.on('renderChatLog', constructCard.registerListeners);
+
+Hooks.on('renderChatMessage', (msg, html) => {
+	const flagData = msg.getFlag(moduleName, 'data');
+	if (typeof flagData === 'object')
+		new HitChatMessage({ target: html[0], props: flagData });
+});
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                   Dummy Hooks
