@@ -1,5 +1,5 @@
 {
-  "id": "bulk-tasks",
+  "id": "does-it-hit-a5e",
   "title": "Does it Hit?! (A5E)",
   "description": "",
   "version": "This is auto replaced",
@@ -60,7 +60,7 @@
     }
   ],
 
-  "name": "bulk-tasks",
+  "name": "does-it-hit-a5e",
   "minimumCoreVersion": "10",
   "compatibleCoreVersion": "10"
 }
