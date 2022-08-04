@@ -1,11 +1,10 @@
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                               Imports and Constants
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-import { moduleName, moduleTag } from './scripts/constants.js';
-import { constructCard } from './scripts/constructCard.js';
-import { hitCheck } from './scripts/hitCheck.js';
-// import { saveAuto } from './scripts/saveAutomation.js';
-import { healAutomation } from './scripts/healAutomation.js';
+import { moduleName, moduleTag } from './modules/constants.js';
+import { constructCard } from './modules/constructCard.js';
+import { hitCheck } from './modules/hitCheck.js';
+import { healAutomation } from './modules/healAutomation.js';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                     Main Hooks
