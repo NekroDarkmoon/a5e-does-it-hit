@@ -25,7 +25,6 @@ Hooks.once('ready', async function () {
 	// Enable Hit Check and damage application
 	new hitCheck();
 	new healAutomation();
-	// new saveAuto();
 
 	console.log(`${moduleTag} | Ready.`);
 

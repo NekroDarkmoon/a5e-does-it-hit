@@ -5,14 +5,14 @@ import { moduleName, moduleTag } from './constants.js';
 import { constructCard } from './constructCard.js';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                                     Main Class
+//                                    Main Class
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 export class hitCheck {
 	constructor() {
-		Hooks.on('dih-attackRoll', this._hitHandler.bind(this));
+		Hooks.on('dih-attackRoll', this._handler.bind(this));
 	}
 
-	_hitHandler(item, roll, actor, _data) {
+	_handler(item, roll, actor, _data) {
 		if (roll.options?.rollMode === 'selfRoll') return;
 
 		// Get Targets
@@ -22,64 +22,40 @@ export class hitCheck {
 
 		if (!targets.length) return;
 
-		// Get Hit Data
-		const hitData = targets.map(t => this._getHitData(actor, item, roll, t));
-		// console.log(hitData);
-
-		// Get Damage Data
-		const dmgData = hitData.map(h => this._getDmgData(h, _data));
-		// console.log(dmgData);
-
-		// Get Display html for each section
-		const hitDisplay = constructCard.hitCheck(hitData);
-		const dmgDisplay = constructCard.dmgDisplay(dmgData);
-
-		// Construct display Data
-		const html = `
-			<ul class="a5e-chat-card dih-card">
-			${constructCard.mergeDisplayArrays(hitDisplay, dmgDisplay)}
-			</ul>
-		`;
-
-		// Send data to message
-		constructCard.toMessage(actor, html);
+		// Get Hit and Damage data
+		const hitData = targets.map(t => this._hitData(actor, item, roll, t));
+		console.log(hitData);
+		const dmgData = hitData.map(i => this._dmgData(i, _data));
+		console.log(dmgData);
 	}
 
-	_getHitData(a, i, r, t) {
-		// Construct Required Vars
-		const ac = t.actor.data.data.attributes.ac;
-		const rollTotal = r.total;
-		const d20 = r.dice[0];
-		const critThreshold = i.data.data.attack.critThreshold;
+	_hitData(actor, item, roll, target) {
+		// Variables
+		const ac = target.actor.system.attributes.ac;
+		const rollTotal = roll.total;
+		const d20 = roll.dice[0];
+		const critThreshold = item.system.attack.critThreshold;
 
 		const isCrit = d20.faces === 20 && d20.total >= (critThreshold ?? 20);
 		const isFumble = d20.faces === 20 && d20.total === 1;
 
 		const isHit = !isFumble && (isCrit || rollTotal >= ac);
 		console.info(
-			`${moduleTag} | ${a.name} ${isHit ? 'hits' : 'misses'} ${
-				t.data.name
+			`${moduleTag} | ${actor.name} ${isHit ? 'hits' : 'misses'} ${
+				target.name
 			} with a ${rollTotal}`
 		);
 
-		const data = { ac, isCrit, isFumble, isHit, rollTotal, token: t };
-
-		// API Integration - Hook Calls
-		if (isCrit) Hooks.call('dih-attackRollCrit', data);
-		if (isFumble) Hooks.call('dih-attackRollFumble', data);
-		if (isHit) Hooks.call('dih-attackRollHit', data);
-		if (!isHit) Hooks.call('dih-attackRollMiss', data);
-
-		return data;
+		return { ac, isCrit, isFumble, isHit, rollTotal, token: target };
 	}
 
-	_getDmgData(hitData, _data) {
-		// Construct required vars
+	_dmgData(hitData, _data) {
+		// Variables
 		const { isHit, token } = hitData;
 		const dmgRolls = _data.damage;
-		const dr = token.actor.data.data.traits.damageResistances;
-		const di = token.actor.data.data.traits.damageImmunities;
-		const dv = token.actor.data.data.traits.damageVulnerabilities;
+		const dr = token.actor.system.traits.damageResistances;
+		const di = token.actor.system.traits.damageImmunities;
+		const dv = token.actor.system.traits.damageVulnerabilities;
 
 		// Create base damage array
 		const baseDamageArray = dmgRolls.map(d => ({
@@ -103,7 +79,7 @@ export class hitCheck {
 		// Get Calculated damage value
 		const calcDamage = calcDamageArray.reduce((a, b) => a + b.value, 0);
 
-		const data = {
+		return {
 			baseDamage,
 			baseDamageArray,
 			calcDamageArray,
@@ -111,7 +87,5 @@ export class hitCheck {
 			isHit,
 			token,
 		};
-
-		return data;
 	}
 }
