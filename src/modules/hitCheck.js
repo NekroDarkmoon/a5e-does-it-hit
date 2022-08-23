@@ -35,6 +35,7 @@ export class hitCheck {
 			user: game.user.id,
 		};
 
+		console.log('here');
 		setTimeout(async _ => {
 			const message = await ChatMessage.create(msgData);
 			await message.setFlag(moduleName, 'data', { hitData, dmgData });
