@@ -40,14 +40,14 @@
   ],
   "scripts": [],
   "styles": [
-    "/styles/module.css"
+    "style.css"
   ],
   "system": ["a5e"],
   "languages": [
     {
       "lang": "en",
       "name": "English",
-      "path": "languages/en.json"
+      "path": "lang/en.json"
     }
   ],
   "url": "This is auto replaced",
