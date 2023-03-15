@@ -8,11 +8,14 @@
 	export let messageDocument;
 
 	function getBodyComponent() {
+		console.log($message.flags[moduleName].cardType);
 		switch ($message?.flags[moduleName]?.cardType) {
 			case 'hitCheck':
 				return HitCheckCard;
 		}
 	}
+
+	console.log(messageDocument);
 
 	const message = new TJSDocument(messageDocument);
 </script>

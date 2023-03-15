@@ -6,7 +6,6 @@ export default class HitCheck {
   }
 
   #handler(item, data) {
-		console.log("Hello");
     if (!data.action) return;
   	const rolls = Object.values(data.action.rolls)
 			.filter((roll) => ['attack', 'damage', 'healing'].includes(roll.type));
