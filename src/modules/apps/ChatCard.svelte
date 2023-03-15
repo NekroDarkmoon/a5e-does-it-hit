@@ -1,5 +1,6 @@
 <script>
-	export const something = void 0;
-</script>
+	import { TJSDocument } from '@typhonjs-fvtt/runtime/svelte/store';
+	export let messageDocument;
 
-This is a Svelte component and it is {something}!
+	const message = new TJSDocument(messageDocument);
+</script>

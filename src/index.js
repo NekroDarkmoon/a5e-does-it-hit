@@ -4,6 +4,7 @@
 import './scss/main.scss';
 
 import { moduleName, moduleTag } from './modules/constants';
+import HitCheck from './modules/hitCheck';
 import registerSettings from './modules/settings';
 
 import ChatCard from './modules/apps/ChatCard.svelte';
@@ -24,6 +25,8 @@ Hooks.once('setup', async function () {
 });
 
 Hooks.once('ready', async function () {
+	new HitCheck();
+
 	console.log(`${moduleTag} | Ready.`);
 });
 
