@@ -3,4 +3,8 @@
 	export let messageDocument;
 
 	const message = new TJSDocument(messageDocument);
+
+	console.log(message);
 </script>
+
+Hello

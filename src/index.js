@@ -4,8 +4,8 @@
 import './scss/main.scss';
 
 import { moduleName, moduleTag } from './modules/constants';
-import HitCheck from './modules/hitCheck';
 import registerSettings from './modules/settings';
+import HitCheck from './modules/hitCheck';
 
 import ChatCard from './modules/apps/ChatCard.svelte';
 

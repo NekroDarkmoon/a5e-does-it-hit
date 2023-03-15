@@ -24,7 +24,7 @@ const config = {
     brotliSize: true,
     lib: {
       name: 'Does it Hit?! (A5E)',
-      entry: path.resolve(__dirname, 'src/index.js'),
+      entry: path.resolve(__dirname, './src/index.js'),
       formats: ['es'],
       fileName: () => 'index.js'
     }
