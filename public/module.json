@@ -39,9 +39,6 @@
     "index.js"
   ],
   "scripts": [],
-  "styles": [
-    "style.css"
-  ],
   "system": ["a5e"],
   "languages": [
     {
