@@ -4,13 +4,13 @@ import path from 'path';
 
 const config = {
   root: 'src/',
-  base: '/modules/does-it-hit-a5e/',
+  base: '/modules/a5e-does-it-hit/',
   publicDir: path.resolve(__dirname, 'public'),
   server: {
     port: 30001,
     open: true,
     proxy: {
-      '^(?!/modules/does-it-hit-a5e/)': 'http://localhost:30000',
+      '^(?!/modules/a5e-does-it-hit/)': 'http://localhost:30000',
       '/socket.io': {
         target: 'ws://localhost:30000',
         ws: true

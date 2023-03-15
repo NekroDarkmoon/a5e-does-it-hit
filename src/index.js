@@ -1,11 +1,12 @@
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                               Imports and Constants
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-import { moduleName, moduleTag } from './modules/constants.js';
-import { constructCard } from './modules/constructCard.js';
-import { hitCheck } from './modules/hitCheck.js';
-import { healAutomation } from './modules/healAutomation.js';
-import HitChatMessage from './modules/apps/HitChatMessage.svelte';
+import './scss/main.scss';
+
+import { moduleName, moduleTag } from './modules/constants';
+import registerSettings from './modules/settings';
+
+import ChatCard from './modules/apps/ChatCard.svelte';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                     Main Hooks
@@ -23,34 +24,31 @@ Hooks.once('setup', async function () {
 });
 
 Hooks.once('ready', async function () {
-	// Enable Hit Check and damage application
-	new hitCheck();
-	new healAutomation();
-
 	console.log(`${moduleTag} | Ready.`);
-
-	libWrapper.register(
-		moduleName,
-		'CONFIG.Actor.documentClass.prototype.constructItemCard',
-		dummyHook,
-		'WRAPPER'
-	);
 });
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                   Chat Hooks
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Hooks.on('renderChatMessage', async function (msg, $html) {
+
+Hooks.on('renderChatMessage', (message, html) => {
 	if (game.user.isGM) return;
 	if (msg.data.blind) $html.addClass('dih--hidden');
+
+  if (message.getFlag(moduleName, 'cardType')) {
+    message._svelteComponent = new ChatCard({
+      target: $(html).find('.message-content article')[0],
+      props: { messageDocument: message }
+    });
+  }
 });
 
-// Hooks.on('renderChatLog', constructCard.registerListeners);
+Hooks.on('preDeleteChatMessage', (message) => {
+  const flagData = message?.flags[moduleName];
 
-Hooks.on('renderChatMessage', (msg, html) => {
-	const flagData = msg.getFlag(moduleName, 'data');
-	if (typeof flagData === 'object')
-		new HitChatMessage({ target: html[0], props: flagData });
+  if (typeof flagData === 'object' && typeof message?._svelteComponent?.$destroy === 'function') {
+    message._svelteComponent.$destroy();
+  }
 });
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
