@@ -19,8 +19,11 @@
 	const healingData = cardData.healingData;
 
 	const attacker = new TJSDocument(fromUuidSync(cardData.actorId));
+	const tokens = cardData.targets
+		.map(t => [t, fromUuidSync(t)])
+		.filter(([_, t]) => t);
 	const targets = new Map(
-		cardData.targets.map(t => [t, new TJSDocument(fromUuidSync(t))])
+		tokens.map(([id, token]) => [id, new TJSDocument(token)])
 	);
 
 	const reducer = new DynMapReducer(targets);
