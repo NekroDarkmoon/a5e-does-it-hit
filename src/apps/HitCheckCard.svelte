@@ -13,8 +13,11 @@
 
 	let cardData = $message.flags?.[moduleName];
 
-	const attacker = new TJSDocument(fromUuidSync(cardData.actorId));
+	const attackData = cardData.attackData;
+	const damageData = cardData.damageData;
+	const healingData = cardData.healingData;
 
+	const attacker = new TJSDocument(fromUuidSync(cardData.actorId));
 	const targets = new Map(
 		cardData.targets.map(t => [t, new TJSDocument(fromUuidSync(t))])
 	);
@@ -25,7 +28,7 @@
 
 <section class="section-container">
 	{#each [...$reducer] as target}
-		<HitSection {target} />
+		<HitSection {target} {attackData} />
 	{/each}
 </section>
 
