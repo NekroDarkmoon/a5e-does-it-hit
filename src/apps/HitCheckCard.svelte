@@ -1,15 +1,16 @@
 <script>
+	import { getContext, setContext } from 'svelte';
 	import { localize } from '@typhonjs-fvtt/runtime/svelte/helper';
 	import { TJSDocument } from '@typhonjs-fvtt/runtime/svelte/store';
 	import { DynMapReducer } from '@typhonjs-fvtt/runtime/svelte/store';
 
-	import { moduleName, moduleTag } from '../modules/constants';
+	import { moduleName } from '../modules/constants';
 	import HitCheck from '../modules/HitCheck';
 
 	import DamageSection from './components/DamageSection.svelte';
 	import HitSection from './components/HitSection.svelte';
 
-	export let message;
+	const message = getContext('message');
 
 	let cardData = $message.flags?.[moduleName];
 
@@ -23,7 +24,8 @@
 	);
 
 	const reducer = new DynMapReducer(targets);
-	console.log(reducer.data);
+
+	setContext('attacker', attacker);
 </script>
 
 <section class="section-container">

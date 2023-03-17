@@ -1,7 +1,8 @@
 <script>
+	import { setContext } from 'svelte';
 	import { TJSDocument } from '@typhonjs-fvtt/runtime/svelte/store';
 
-	import { moduleName, moduleTag } from '../modules/constants';
+	import { moduleName } from '../modules/constants';
 
 	import HitCheckCard from './HitCheckCard.svelte';
 
@@ -15,6 +16,7 @@
 	}
 
 	const message = new TJSDocument(messageDocument);
+	setContext('message', message);
 </script>
 
-<svelte:component this={getBodyComponent()} {message} />
+<svelte:component this={getBodyComponent()} />

@@ -5,7 +5,7 @@
 	export let attackData;
 	export let cardData;
 
-	let targetFlag = cardData.targetData?.[$target.uuid];
+	let targetFlag = cardData.targetData?.[$target.id];
 
 	$: ac = targetFlag?.ac ?? $target.actor.system.attributes.ac;
 </script>

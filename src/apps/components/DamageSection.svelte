@@ -1,13 +1,17 @@
 <script>
 	import { localize } from '@typhonjs-fvtt/runtime/svelte/helper';
+	import { getContext } from 'svelte';
+
+	import { moduleName } from '../../modules/constants';
 
 	export let target;
 	export let damageData;
 	export let cardData;
 
+	const message = getContext('message');
 	const { A5E } = CONFIG;
 
-	let targetFlag = cardData.targetData?.[$target.uuid];
+	let targetFlag = cardData.targetData?.[$target.id];
 	let damageOption = damageData.map(({ damage }) => damage);
 
 	function updateDamageOptions(event) {
@@ -15,6 +19,21 @@
 		damageOption = damageData.map(({ damage }) => damage * value);
 	}
 
+	function applyDamage() {
+		$target.actor.applyDamage(totalDamage);
+		$message.update({
+			[`flags.${moduleName}.targetData.${$target.id}`]: {
+				hp: $target.actor.system.attributes.hp.value,
+				ac: $target.actor.system.attributes.ac,
+			},
+		});
+
+		console.log($message);
+	}
+
+	function resetDamage() {}
+
+	$: reactive = targetFlag?.hp ? false : true;
 	$: totalDamage = damageOption.reduce((a, b) => a + b, 0);
 	$: hp = targetFlag?.hp ?? $target.actor.system.attributes.hp.value;
 </script>
@@ -35,13 +54,13 @@
 				<option value={damage * 0.25}>1/4</option>
 			</select>
 
-			<button class="apply-button">
+			<!-- <button class="apply-button">
 				<i class="fas fa-check" />
 			</button>
 
 			<button class="reset-button">
 				<i class="fas fa-undo" />
-			</button>
+			</button> -->
 		</div>
 	{/each}
 
@@ -68,11 +87,11 @@
 			<option value={0.25}>1/4</option>
 		</select>
 
-		<button class="apply-button" style="height: 1.25rem; width: 1.25rem">
+		<button class="apply-button" on:click={applyDamage} disabled={!reactive}>
 			<i class="fas fa-check" />
 		</button>
 
-		<button class="reset-button" style="height: 1.25rem; width: 1.25rem">
+		<button class="reset-button" on:click={resetDamage} disabled={reactive}>
 			<i class="fas fa-undo" />
 		</button>
 	</div>
@@ -113,6 +132,24 @@
 		justify-content: center;
 		background: transparent;
 		border: none;
+		color: #999;
+		transition: all 0.15s ease-in-out;
+
+		&:hover,
+		&:focus {
+			box-shadow: none;
+			transform: scale(1.2);
+			color: #555;
+		}
+
+		&:disabled {
+			cursor: not-allowed;
+
+			&:hover {
+				transform: none;
+				color: #999;
+			}
+		}
 
 		i {
 			position: absolute;
