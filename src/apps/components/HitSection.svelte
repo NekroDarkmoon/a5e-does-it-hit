@@ -5,8 +5,6 @@
 	export let attackData;
 	export let cardData;
 
-	console.log($target.uuid);
-
 	let targetFlag = cardData.targetData?.[$target.uuid];
 
 	$: ac = targetFlag?.ac ?? $target.actor.system.attributes.ac;
@@ -115,8 +113,8 @@
 
 	.roll-background {
 		position: absolute;
-		height: 2rem;
-		bottom: 0.2rem;
+		height: 1.8rem;
+		bottom: 0.35rem;
 		fill: rgba(0, 0, 0, 0.15);
 		z-index: 0;
 	}

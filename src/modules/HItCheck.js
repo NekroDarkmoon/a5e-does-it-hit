@@ -80,7 +80,7 @@ export default class HitCheck {
 			return {
 				canCrit: roll.canCrit,
 				label: roll.label,
-				damage: roll.total,
+				damage: roll.roll.total,
 				damageType: roll.damageType,
 			};
 		});
