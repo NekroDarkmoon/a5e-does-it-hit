@@ -5,6 +5,8 @@
 	export let damageData;
 	export let cardData;
 
+	const { A5E } = CONFIG;
+
 	let targetFlag = cardData.targetData?.[$target.uuid];
 	let damageOption = damageData.map(({ damage }) => damage);
 
@@ -21,9 +23,8 @@
 	{#each damageData as { canCrit, damage, damageType }, idx}
 		<div class="damage__container">
 			<span class="damage-data">
-				<!--  -->
-				{damageOption[idx]}
-				{damageType}
+				{localize(A5E.damageTypes[damageType] ?? damageType)}
+				({Math.floor(damageOption[idx])})
 			</span>
 
 			<select class="multiplier" bind:value={damageOption[idx]}>
@@ -47,12 +48,17 @@
 	<hr class="a5e-rule u-pt-md" />
 
 	<div class="damage__container">
-		<span class="damage-data">
-			{totalDamage}
+		<span class="damage-data" style="font-size: 0.833rem;">
+			Hp:
+			<span style="color: #772020;">{hp - Math.floor(totalDamage)}</span>
+			➡ [
+			<span style="color: #425f65;">{hp}</span>
+			- {Math.floor(totalDamage)}]
 		</span>
 
 		<select
 			class="multiplier"
+			style="font-size: 0.833rem; height: 1.25rem;"
 			on:change={({ target }) => updateDamageOptions(target)}
 		>
 			<option value={0}>None</option>
@@ -62,11 +68,11 @@
 			<option value={0.25}>1/4</option>
 		</select>
 
-		<button class="apply-button">
+		<button class="apply-button" style="height: 1.25rem; width: 1.25rem">
 			<i class="fas fa-check" />
 		</button>
 
-		<button class="reset-button">
+		<button class="reset-button" style="height: 1.25rem; width: 1.25rem">
 			<i class="fas fa-undo" />
 		</button>
 	</div>
@@ -83,14 +89,10 @@
 		gap: 0.25rem;
 		align-items: center;
 		padding-inline: 0.25rem;
-		padding-block: 0.125rem;
-
-		&:not(:last-child) {
-			// background-color: dodgerblue;
-		}
+		padding-block: 0.25rem;
 
 		&:nth-child(odd):not(:last-child) {
-			background-color: #ccc;
+			background-color: #dedcd7;
 		}
 	}
 	.damage-data {

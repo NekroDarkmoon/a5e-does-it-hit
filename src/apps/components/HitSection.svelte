@@ -95,11 +95,6 @@
 		align-items: center;
 		height: 100%;
 		font-weight: bold;
-
-		// background-image: url('/icons/svg/d20-grey.svg');
-		// background-repeat: no-repeat;
-		// background-position: center 60%;
-		// background-size: 2rem;
 	}
 
 	.hit-section__ac {
@@ -115,7 +110,7 @@
 		position: absolute;
 		height: 1.8rem;
 		bottom: 0.35rem;
-		fill: rgba(0, 0, 0, 0.15);
+		fill: rgba(0, 0, 0, 0.225);
 		z-index: 0;
 	}
 
