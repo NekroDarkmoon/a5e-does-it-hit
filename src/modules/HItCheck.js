@@ -7,21 +7,29 @@ export default class HitCheck {
 
   #handler(item, data) {
     if (!data.action) return;
-  	const rolls = Object.values(data.action.rolls)
+  	const rolls = Object.values(data.rolls)
 			.filter((roll) => ['attack', 'damage', 'healing'].includes(roll.type));
-
 		if (!rolls.length) return;
 
+    // Get Targets
     const targets = [...game.user.targets?.values() ?? []].filter(
       t => !!t.actor
     );
-
     if (!targets.length) return;
+
+    // Filter rolls into attack, damage, and healing rolls.
+    const attackData = this.#prepareAttackRollData(rolls.filter((roll) => roll.type === 'attack')[0]);
+    const damageRolls = rolls.filter((roll) => roll.type === 'damage');
+    const healingRolls = rolls.filter((roll) => roll.type === 'healing');
+
+
+    console.log(data);
+
 
     const chatData = {
       user: game.user?.id,
       speaker: ChatMessage.getSpeaker({ actor: item.parent }),
-      type: data.rolls.length ? CONST.CHAT_MESSAGE_TYPES.ROLL : CONST.CHAT_MESSAGE_TYPES.OTHER,
+      type: CONST.CHAT_MESSAGE_TYPES.OTHER,
       sound: CONFIG.sounds.dice,
       flags: {
         [moduleName]: {
@@ -36,4 +44,26 @@ export default class HitCheck {
 
     ChatMessage.create(chatData);
   }
+
+  /**
+   * 
+   * @param {Object} attackRoll 
+   */
+  #prepareAttackRollData(attackRoll) {
+    
+
+  }
+
+  /**
+   * 
+   * @param {Array<Object>} damageRolls 
+   */
+  #prepareDamageData(damageRolls) {}
+
+
+  /**
+   * 
+   * @param {Array<Object>} healingRolls 
+   */
+  #prepareHealingData(healingRolls) {}
 }

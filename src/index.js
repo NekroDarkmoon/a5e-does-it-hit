@@ -5,7 +5,7 @@ import './scss/main.scss';
 
 import { moduleName, moduleTag } from './modules/constants';
 import registerSettings from './modules/settings';
-import HitCheck from './modules/hitCheck';
+import HitCheck from './modules/HitCheck';
 
 import ChatCard from './modules/apps/ChatCard.svelte';
 
@@ -39,7 +39,6 @@ Hooks.on('renderChatMessage', (message, html) => {
 	// if (msg.data.blind) html.addClass('dih--hidden');
 
   if (message.getFlag(moduleName, 'cardType')) {
-	console.log(message);
     message._svelteComponent = new ChatCard({
       target: $(html).find('.message-content article')[0],
       props: { messageDocument: message }
