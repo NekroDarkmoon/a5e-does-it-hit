@@ -1,12 +1,11 @@
 <script>
-	import { localize } from '@typhonjs-fvtt/runtime/svelte/helper';
-
 	export let target;
 	export let attackData;
 	export let cardData;
 
-	let targetFlag = cardData.targetData?.[$target?.id];
+	const hit = () => (attackData.rollTotal >= ac ? true : false);
 
+	let targetFlag = cardData.targetData?.[$target?.id];
 	$: ac = targetFlag?.ac ?? $target?.actor.system.attributes.ac;
 </script>
 
@@ -24,11 +23,12 @@
 
 		<div
 			class="hit-section__roll"
-			class:hit-section_roll-crit={attackData.isCrit}
-			class:hit-section_roll-fumble={attackData.isFumble}
+			class:roll-background--crit={attackData.isCrit}
+			class:roll-background--fumble={attackData.isFumble}
 		>
 			<svg
 				class="roll-background"
+				class:roll-background--hit={hit()}
 				x="0px"
 				y="0px"
 				viewBox="-16 0 512 512"
@@ -112,8 +112,34 @@
 		position: absolute;
 		height: 1.8rem;
 		bottom: 0.35rem;
-		fill: rgba(0, 0, 0, 0.225);
+		fill: rgba(170 2 0 / 0.2);
 		z-index: 0;
+
+		&--hit {
+			fill: rgba(24 82 11 / 0.2);
+		}
+
+		&--fumble:after {
+			content: 'fumble';
+			position: absolute;
+			bottom: -2px;
+			font-family: 'Modesto Condensed';
+			font-size: 0.694rem;
+			text-transform: lowercase;
+			background: none;
+			color: rgb(170 2 0);
+		}
+
+		&--crit:after {
+			content: 'crit';
+			position: absolute;
+			bottom: -2px;
+			font-family: 'Modesto Condensed';
+			font-size: 0.694rem;
+			text-transform: lowercase;
+			background: none;
+			color: rgb(24 82 11);
+		}
 	}
 
 	.ac-background {

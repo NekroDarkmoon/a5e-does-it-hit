@@ -44,5 +44,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
+		padding: 0.25rem;
 	}
 </style>
