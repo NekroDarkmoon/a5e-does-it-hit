@@ -1,4 +1,4 @@
-name: Release Creation
+name: Does It Hit Version Release
 
 on:
   release:
@@ -7,8 +7,37 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
+      # Node
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Cache npm dependencies
+      - name: Cache NPM Dependencies
+        id: cache-npm
+        uses: actions/cache@v3
+        with:
+          path: node_modules/
+          key: npm-${{ hashFiles('package-lock.json') }}
+
+      # Install npm dependencies
+      - name: Install Dependencies
+        if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        run: |
+          npm i
+
+      # Builds Packs
+      - name: Build Module
+        run: npm run build
 
       # get part of the tag after the `v`
       - name: Extract tag version number
@@ -20,15 +49,17 @@ jobs:
         id: sub_manifest_link_version
         uses: microsoft/variable-substitution@v1
         with:
-          files: 'module.json'
+          files: './dist/module.json'
         env:
           version: ${{steps.get_version.outputs.version-without-v}}
           url: https://github.com/${{github.repository}}
           manifest: https://github.com/${{github.repository}}/releases/latest/download/module.json
-          download: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/module.zip
+          download: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/a5e-does-it-hit.zip
 
       # Create a zip file with all files required by the module to add to the release
-      - run: zip -r ./module.zip module.json index.js LICENSE styles/ modules/ templates/ languages/
+      - name: Zip Files
+        working-directory: ./dist
+        run: zip -r ./a5e-does-it-hit.zip ./*
 
       # Create a release for this specific version
       - name: Update Release with Files
@@ -37,9 +68,8 @@ jobs:
         with:
           allowUpdates: true # Set this to false if you want to prevent updating existing releases
           name: ${{ github.event.release.name }}
-          draft: ${{ github.event.release.unpublished }}
-          prerelease: ${{ github.event.release.prerelease }}
+          draft: false
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: './module.json, ./module.zip'
+          artifacts: './dist/module.json, ./dist/a5e-does-it-hit.zip'
           tag: ${{ github.event.release.tag_name }}
           body: ${{ github.event.release.body }}
