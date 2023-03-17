@@ -28,7 +28,9 @@
 
 <section class="section-container">
 	{#each [...$reducer] as target}
-		<HitSection {target} {attackData} />
+		<HitSection {target} {attackData} {cardData} />
+
+		<DamageSection {target} {damageData} {cardData} />
 	{/each}
 </section>
 
