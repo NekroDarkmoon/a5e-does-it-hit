@@ -13,23 +13,21 @@ export default class HitCheck {
 		if (!rolls.length) return;
 
 		// Get Targets
-		const targets = [...(game.user.targets?.values() ?? [])].filter(
-			t => !!t.actor
-		);
+		const targets = [...(game.user.targets?.values() ?? [])]
+			.filter(t => !!t.actor)
+			.map(t => t.id);
 		if (!targets.length) return;
 
 		// Filter rolls into attack, damage, and healing rolls.
 		const attackData = this.#prepareAttackRollData(
 			rolls.filter(roll => roll.type === 'attack')[0]
 		);
-		const damageRolls = this.#prepareDamageData(
+		const damageData = this.#prepareDamageData(
 			rolls.filter(roll => roll.type === 'damage')
 		);
-		const healingRolls = this.#prepareHealingData(
+		const healingData = this.#prepareHealingData(
 			rolls.filter(roll => roll.type === 'healing')
 		);
-
-		console.log(data);
 
 		const chatData = {
 			user: game.user?.id,
@@ -40,7 +38,10 @@ export default class HitCheck {
 				[moduleName]: {
 					actorId: item.parent.uuid,
 					cardType: 'hitCheck',
-					rollData: data.rolls.map(({ roll, ...rollData }) => rollData),
+					attackData,
+					damageData,
+					healingData,
+					targets,
 				},
 			},
 			content: '<article></article>',
