@@ -74,6 +74,17 @@ export default class HitCheck {
 	 */
 	#prepareDamageData(damageRolls) {
 		if (!damageRolls.length) return;
+
+		const data = damageRolls.map(roll => {
+			return {
+				canCrit: roll.canCrit,
+				label: roll.label,
+				damage: roll.total,
+				damageType: roll.damageType,
+			};
+		});
+
+		return data;
 	}
 
 	/**
@@ -82,5 +93,15 @@ export default class HitCheck {
 	 */
 	#prepareHealingData(healingRolls) {
 		if (!healingRolls.length) return;
+
+		const data = healingRolls.map(roll => {
+			return {
+				label: roll.label,
+				healing: roll.total,
+				healingType: roll.healingType,
+			};
+		});
+
+		return data;
 	}
 }
