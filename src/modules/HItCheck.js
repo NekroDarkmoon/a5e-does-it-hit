@@ -15,7 +15,7 @@ export default class HitCheck {
 		// Get Targets
 		const targets = [...(game.user.targets?.values() ?? [])]
 			.filter(t => !!t.actor)
-			.map(t => t.id);
+			.map(t => t.document.uuid);
 		if (!targets.length) return;
 
 		// Filter rolls into attack, damage, and healing rolls.

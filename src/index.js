@@ -7,7 +7,7 @@ import { moduleName, moduleTag } from './modules/constants';
 import registerSettings from './modules/settings';
 import HitCheck from './modules/HitCheck';
 
-import ChatCard from './modules/apps/ChatCard.svelte';
+import ChatCard from './apps/ChatCard.svelte';
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                     Main Hooks
@@ -38,20 +38,23 @@ Hooks.on('renderChatMessage', (message, html) => {
 	// if (game.user.isGM) return;
 	// if (msg.data.blind) html.addClass('dih--hidden');
 
-  if (message.getFlag(moduleName, 'cardType')) {
-    message._svelteComponent = new ChatCard({
-      target: $(html).find('.message-content article')[0],
-      props: { messageDocument: message }
-    });
-  }
+	if (message.getFlag(moduleName, 'cardType')) {
+		message._svelteComponent = new ChatCard({
+			target: $(html).find('.message-content article')[0],
+			props: { messageDocument: message },
+		});
+	}
 });
 
-Hooks.on('preDeleteChatMessage', (message) => {
-  const flagData = message?.flags[moduleName];
+Hooks.on('preDeleteChatMessage', message => {
+	const flagData = message?.flags[moduleName];
 
-  if (typeof flagData === 'object' && typeof message?._svelteComponent?.$destroy === 'function') {
-    message._svelteComponent.$destroy();
-  }
+	if (
+		typeof flagData === 'object' &&
+		typeof message?._svelteComponent?.$destroy === 'function'
+	) {
+		message._svelteComponent.$destroy();
+	}
 });
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
