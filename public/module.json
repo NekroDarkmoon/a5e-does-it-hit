@@ -19,27 +19,34 @@
       "ko-fi": "https://ko-fi.com/nekrodarkmoon"
     }
   ],
-  
   "relationships": {
-    "systems": [{
-      "id": "a5e",
-      "type": "system",
-      "manifest": "https://raw.githubusercontent.com/Pjb518/FoundryVTT-Level-Up-Official/main/public/system.json",
-      "compatibility": {
-        "minimum": "0.9.0"
+    "systems": [
+      {
+        "id": "a5e",
+        "type": "system",
+        "manifest": "https://raw.githubusercontent.com/Pjb518/FoundryVTT-Level-Up-Official/main/public/system.json",
+        "compatibility": {
+          "minimum": "0.9.0"
+        }
       }
-    }],
-    "requires": [{
-      "id": "lib-wrapper",
-      "type": "module"
-    }]
+    ],
+    "requires": [
+      {
+        "id": "lib-wrapper",
+        "type": "module"
+      }
+    ]
   },
-
   "esmodules": [
     "index.js"
   ],
   "scripts": [],
-  "system": ["a5e"],
+  "system": [
+    "a5e"
+  ],
+  "styles": [
+    "style.css"
+  ],
   "languages": [
     {
       "lang": "en",
@@ -56,7 +63,6 @@
       "url": "https://avatars2.githubusercontent.com/u/71292812?s=400&u=ccdb4eeb7abf551ca8f314e5a9bfd0479a4d3d41&v=4"
     }
   ],
-
   "name": "does-it-hit-a5e",
   "minimumCoreVersion": "10",
   "compatibleCoreVersion": "10"

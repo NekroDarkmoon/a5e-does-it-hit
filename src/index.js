@@ -59,7 +59,7 @@ Hooks.on('preDeleteChatMessage', message => {
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                   Dummy Hooks
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-function dummyHook(wrapped, data) {
+function dummyHook (wrapped, data) {
 	const actor = this.data;
 	const item = actor.items.get(data.id);
 	if (data.actionOptions?.includes('attack')) {
