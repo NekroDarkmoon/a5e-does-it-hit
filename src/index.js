@@ -37,6 +37,7 @@ Hooks.once('ready', async function () {
 Hooks.on('renderChatMessage', (message, html) => {
 	// if (game.user.isGM) return;
 	// if (msg.data.blind) html.addClass('dih--hidden');
+	if (!game.user.isGM) html.addClass('hide-card');
 	if (message.getFlag(moduleName, 'cardType')) {
 		message._svelteComponent = new ChatCard({
 			target: $(html).find('.message-content article')[0],
