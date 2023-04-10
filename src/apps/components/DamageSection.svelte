@@ -42,7 +42,7 @@
 	}
 
 	$: reactive = targetFlag?.hp ? false : true;
-	$: totalDamage = damageOption.reduce((a, b) => a + b, 0);
+	$: totalDamage = Math.floor(damageOption.reduce((a, b) => a + b, 0));
 	$: hp = targetFlag?.hp ?? $target?.actor.system.attributes.hp.value;
 </script>
 
@@ -78,10 +78,10 @@
 		<div class="damage__container">
 			<span class="damage-data" style="font-size: 0.833rem;">
 				Hp:
-				<span style="color: #772020;">{hp - Math.floor(totalDamage)}</span>
+				<span style="color: #772020;">{hp - totalDamage}</span>
 				➡ [
 				<span style="color: #425f65;">{hp}</span>
-				- {Math.floor(totalDamage)}]
+				- {totalDamage}]
 			</span>
 
 			<select
