@@ -37,7 +37,9 @@ Hooks.once('ready', async function () {
 Hooks.on('renderChatMessage', (message, html) => {
 	// if (game.user.isGM) return;
 	// if (msg.data.blind) html.addClass('dih--hidden');
+	
 	if (message.getFlag(moduleName, 'cardType')) {
+		if (!game.user.isGM) html.addClass('hide-card');
 		message._svelteComponent = new ChatCard({
 			target: $(html).find('.message-content article')[0],
 			props: { messageDocument: message },
@@ -59,7 +61,7 @@ Hooks.on('preDeleteChatMessage', message => {
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                                   Dummy Hooks
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-function dummyHook(wrapped, data) {
+function dummyHook (wrapped, data) {
 	const actor = this.data;
 	const item = actor.items.get(data.id);
 	if (data.actionOptions?.includes('attack')) {
