@@ -28,12 +28,6 @@
           "minimum": "0.9.0"
         }
       }
-    ],
-    "requires": [
-      {
-        "id": "lib-wrapper",
-        "type": "module"
-      }
     ]
   },
   "esmodules": [
