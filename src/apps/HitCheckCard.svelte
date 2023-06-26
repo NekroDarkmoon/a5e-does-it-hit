@@ -5,7 +5,6 @@
 	import { DynMapReducer } from '@typhonjs-fvtt/runtime/svelte/store';
 
 	import { moduleName } from '../modules/constants';
-	import HitCheck from '../modules/HitCheck';
 
 	import DamageSection from './components/DamageSection.svelte';
 	import HitSection from './components/HitSection.svelte';
@@ -22,8 +21,9 @@
 	const tokens = cardData.targets
 		.map(t => [t, fromUuidSync(t)])
 		.filter(([_, t]) => t);
+
 	const targets = new Map(
-		tokens.map(([id, token]) => [id, new TJSDocument(token)])
+		tokens.map(([id, token]) => [id, new TJSDocument(token.actor)])
 	);
 
 	const reducer = new DynMapReducer(targets);

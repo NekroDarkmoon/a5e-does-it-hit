@@ -5,20 +5,20 @@
 
 	const hit = () => (attackData.rollTotal >= ac ? true : false);
 
-	let targetFlag = cardData.targetData?.[$target?.id];
-	$: ac = targetFlag?.ac ?? $target?.actor.system.attributes.ac;
+	let targetFlag = cardData.targetData?.[$target?.parent.id];
+	$: ac = targetFlag?.ac ?? $target?.system.attributes.ac;
 </script>
 
 <div class="hit-section">
 	{#if $target}
 		<img
 			class="hit-section__img"
-			src={$target.texture.src}
-			alt={$target.displayName ?? $target.name}
+			src={$target.parent.texture.src}
+			alt={$target.parent.displayName ?? $target.parent.name}
 		/>
 
 		<span class="hit-section__name">
-			{$target.name}
+			{$target.parent.name}
 		</span>
 
 		<div
@@ -46,7 +46,7 @@
 				/>
 			</svg>
 
-			{attackData.rollTotal}
+			{attackData.rollTotal ?? ''}
 		</div>
 
 		<div class="hit-section__ac">

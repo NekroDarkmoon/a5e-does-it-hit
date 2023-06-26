@@ -11,7 +11,7 @@
 	const message = getContext('message');
 	const { A5E } = CONFIG;
 
-	let targetFlag = cardData.targetData?.[$target?.id];
+	let targetFlag = cardData.targetData?.[$target?.parent?.id];
 	let damageOption = damageData.map(({ damage }) => damage);
 
 	function updateDamageOptions(event) {
@@ -20,30 +20,30 @@
 	}
 
 	function applyDamage() {
-		$target.actor.applyDamage(totalDamage);
+		$target.applyDamage(totalDamage);
 		$message.update({
-			[`flags.${moduleName}.targetData.${$target?.id}`]: {
-				hp: $target.actor.system.attributes.hp.value,
-				ac: $target.actor.system.attributes.ac,
+			[`flags.${moduleName}.targetData.${$target?.parent?.id}`]: {
+				hp: $target.system.attributes.hp.value,
+				ac: $target.system.attributes.ac,
 				damage: totalDamage,
 			},
 		});
 	}
 
 	function resetDamage() {
-		const undoDamage = cardData.targetData?.[$target.id]?.damage ?? 0;
-		$target.actor.applyHealing(undoDamage);
+		const undoDamage = cardData.targetData?.[$target?.parent?.id]?.damage ?? 0;
+		$target.applyHealing(undoDamage);
 
 		$message.update({
 			[`flags.${moduleName}.targetData`]: {
-				[`-=${$target.id}`]: null,
+				[`-=${$target?.parent?.id}`]: null,
 			},
 		});
 	}
 
 	$: reactive = targetFlag?.hp ? false : true;
 	$: totalDamage = Math.floor(damageOption.reduce((a, b) => a + b, 0));
-	$: hp = targetFlag?.hp ?? $target?.actor.system.attributes.hp.value;
+	$: hp = targetFlag?.hp ?? $target?.system.attributes.hp.value;
 </script>
 
 <div class="damage-section">
@@ -62,14 +62,6 @@
 					<option value={damage * 0.5}>1/2</option>
 					<option value={damage * 0.25}>1/4</option>
 				</select>
-
-				<!-- <button class="apply-button">
-				<i class="fas fa-check" />
-			</button>
-
-			<button class="reset-button">
-				<i class="fas fa-undo" />
-			</button> -->
 			</div>
 		{/each}
 
