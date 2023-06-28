@@ -46,7 +46,7 @@
 				/>
 			</svg>
 
-			{attackData.rollTotal}
+			{attackData.rollTotal ?? ''}
 		</div>
 
 		<div class="hit-section__ac">

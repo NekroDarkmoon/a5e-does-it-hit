@@ -1,11 +1,10 @@
 <script>
 	import { getContext, setContext } from 'svelte';
-	import { localize } from '@typhonjs-fvtt/runtime/svelte/helper';
 	import { TJSDocument } from '@typhonjs-fvtt/runtime/svelte/store';
 	import { DynMapReducer } from '@typhonjs-fvtt/runtime/svelte/store';
 
 	import { moduleName } from '../modules/constants';
-	import HitCheck from '../modules/HitCheck';
+	import TJSTokenDocument from '../modules/TJSTokenDocument';
 
 	import DamageSection from './components/DamageSection.svelte';
 	import HitSection from './components/HitSection.svelte';
@@ -23,7 +22,7 @@
 		.map(t => [t, fromUuidSync(t)])
 		.filter(([_, t]) => t);
 	const targets = new Map(
-		tokens.map(([id, token]) => [id, new TJSDocument(token)])
+		tokens.map(([id, token]) => [id, new TJSTokenDocument(token)])
 	);
 
 	const reducer = new DynMapReducer(targets);
