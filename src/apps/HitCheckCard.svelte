@@ -1,7 +1,7 @@
 <script>
 	import { getContext, setContext } from 'svelte';
-	import { TJSDocument } from '@typhonjs-fvtt/runtime/svelte/store';
-	import { DynMapReducer } from '@typhonjs-fvtt/runtime/svelte/store';
+	import { TJSDocument } from '#runtime/svelte/store/fvtt/document';
+	import { DynMapReducer } from '#runtime/svelte/store/reducer';
 
 	import { moduleName } from '../modules/constants';
 	import TJSTokenDocument from '../modules/TJSTokenDocument';

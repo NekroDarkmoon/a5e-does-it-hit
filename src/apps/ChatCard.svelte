@@ -1,6 +1,6 @@
 <script>
 	import { setContext } from 'svelte';
-	import { TJSDocument } from '@typhonjs-fvtt/runtime/svelte/store';
+	import { TJSDocument } from '#runtime/svelte/store/fvtt/document';
 
 	import { moduleName } from '../modules/constants';
 

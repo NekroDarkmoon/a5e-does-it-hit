@@ -1,4 +1,4 @@
-import { TJSDocument } from "@typhonjs-fvtt/runtime/svelte/store"
+import { TJSDocument } from '#runtime/svelte/store/fvtt/document';
 
 export default class TJSTokenDocument extends TJSDocument {
 
