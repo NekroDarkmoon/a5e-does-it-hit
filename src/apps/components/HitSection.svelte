@@ -6,7 +6,7 @@
 	const hit = () => (attackData.rollTotal >= ac ? true : false);
 
 	let targetFlag = cardData.targetData?.[$target?.id];
-	$: ac = targetFlag?.ac ?? $target?.actor.system.attributes.ac;
+	$: ac = targetFlag?.ac ?? $target?.actor.system.attributes.ac.value ?? 0;
 </script>
 
 <div class="hit-section">

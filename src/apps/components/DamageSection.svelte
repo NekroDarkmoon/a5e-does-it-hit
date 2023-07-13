@@ -24,7 +24,7 @@
 		$message.update({
 			[`flags.${moduleName}.targetData.${$target?.id}`]: {
 				hp: $target.actor.system.attributes.hp.value,
-				ac: $target.actor.system.attributes.ac,
+				ac: $target.actor.system.attributes.ac.value,
 				damage: totalDamage,
 			},
 		});
