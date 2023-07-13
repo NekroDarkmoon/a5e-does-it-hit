@@ -4,7 +4,6 @@
 	import { DynMapReducer } from '#runtime/svelte/store/reducer';
 
 	import { moduleName } from '../modules/constants';
-	import TJSTokenDocument from '../modules/TJSTokenDocument';
 
 	import DamageSection from './components/DamageSection.svelte';
 	import HitSection from './components/HitSection.svelte';
@@ -22,7 +21,7 @@
 		.map(t => [t, fromUuidSync(t)])
 		.filter(([_, t]) => t);
 	const targets = new Map(
-		tokens.map(([id, token]) => [id, new TJSTokenDocument(token)])
+		tokens.map(([id, token]) => [id, new TJSDocument(token)])
 	);
 
 	const reducer = new DynMapReducer(targets);
