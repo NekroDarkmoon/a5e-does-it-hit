@@ -98,7 +98,7 @@ export default class HitCheck {
 		const data = healingRolls.map(roll => {
 			return {
 				label: roll.label,
-				healing: roll.total,
+				healing: roll.roll.total,
 				healingType: roll.healingType,
 			};
 		});

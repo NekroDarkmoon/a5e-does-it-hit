@@ -11,7 +11,7 @@
 	const message = getContext('message');
 	const { A5E } = CONFIG;
 
-	let targetFlag = cardData.targetData?.[$target?.id];
+	let targetFlag = cardData.targetData?.damage?.[$target?.id];
 	let damageOption = damageData.map(({ damage }) => damage);
 
 	function updateDamageOptions(event) {
@@ -22,7 +22,7 @@
 	function applyDamage() {
 		$target.actor.applyDamage(totalDamage);
 		$message.update({
-			[`flags.${moduleName}.targetData.${$target?.id}`]: {
+			[`flags.${moduleName}.targetData.damage.${$target?.id}`]: {
 				hp: $target.actor.system.attributes.hp.value,
 				ac: $target.actor.system.attributes.ac.value,
 				damage: totalDamage,
@@ -31,11 +31,11 @@
 	}
 
 	function resetDamage() {
-		const undoDamage = cardData.targetData?.[$target.id]?.damage ?? 0;
+		const undoDamage = targetFlag?.damage ?? 0;
 		$target.actor.applyHealing(undoDamage);
 
 		$message.update({
-			[`flags.${moduleName}.targetData`]: {
+			[`flags.${moduleName}.targetData.damage`]: {
 				[`-=${$target.id}`]: null,
 			},
 		});
@@ -62,14 +62,6 @@
 					<option value={damage * 0.5}>1/2</option>
 					<option value={damage * 0.25}>1/4</option>
 				</select>
-
-				<!-- <button class="apply-button">
-				<i class="fas fa-check" />
-			</button>
-
-			<button class="reset-button">
-				<i class="fas fa-undo" />
-			</button> -->
 			</div>
 		{/each}
 
@@ -81,7 +73,7 @@
 				<span style="color: #772020;">{hp - totalDamage}</span>
 				➡ [
 				<span style="color: #425f65;">{hp}</span>
-				- {totalDamage}]
+				- {totalDamage} ]
 			</span>
 
 			<select

@@ -7,6 +7,7 @@
 
 	import DamageSection from './components/DamageSection.svelte';
 	import HitSection from './components/HitSection.svelte';
+	import HealingSection from './components/HealingSection.svelte';
 
 	const message = getContext('message');
 
@@ -33,7 +34,17 @@
 	{#each [...$reducer] as target}
 		<HitSection {target} {attackData} {cardData} />
 
-		<DamageSection {target} {damageData} {cardData} />
+		{#if damageData}
+			<DamageSection {target} {damageData} {cardData} />
+		{/if}
+
+		{#if damageData && healingData}
+			<hr class="a5e-rule" />
+		{/if}
+
+		{#if healingData}
+			<HealingSection {target} {healingData} {cardData} />
+		{/if}
 	{/each}
 </section>
 
