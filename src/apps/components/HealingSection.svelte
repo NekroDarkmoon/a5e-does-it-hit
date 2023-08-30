@@ -12,16 +12,25 @@
 	const { A5E } = CONFIG;
 
 	let targetFlag = cardData.targetData?.healing?.[$target?.id];
-	let healingOption = healingData.map(({ healing }) => healing);
+	let healingOption = healingData.map(({ healing, healingType }) => ({
+		healing,
+		healingType,
+	}));
 
 	function updateHealingOptions(event) {
 		const value = Number(event.value);
-		healingOption = healingData.map(({ healing }) => healing * value);
+		healingOption = healingData.map(({ healing, healingType }) => ({
+			healing: healing * value,
+			healingType,
+		}));
 	}
 
 	function applyHealing() {
-		// TODO: Account for tempHP
-		$target.actor.applyHealing(totalHealing);
+		const temp = totalHealing.temp;
+		const heal = totalHealing.heal;
+		$target.actor.applyHealing(heal);
+		$target.actor.applyHealing(temp, { temp: true });
+
 		$message.update({
 			[`flags.${moduleName}.targetData.healing.${$target?.id}`]: {
 				hp: $target.actor.system.attributes.hp.value,
@@ -32,8 +41,11 @@
 	}
 
 	function resetHealing() {
-		const undoHealing = targetFlag?.healing ?? 0;
-		$target.actor.applyDamage(undoHealing);
+		const temp = targetFlag?.healing?.temp ?? 0;
+		const heal = targetFlag?.healing?.heal ?? 0;
+
+		if (tempHp > 0) $target.actor.applyDamage(temp);
+		$target.actor.applyDamage(heal);
 
 		$message.update({
 			[`flags.${moduleName}.targetData.healing`]: {
@@ -43,8 +55,17 @@
 	}
 
 	$: reactive = targetFlag?.hp ? false : true;
-	$: totalHealing = Math.floor(healingOption.reduce((a, b) => a + b, 0));
+	$: totalHealing = healingOption.reduce(
+		(acc, b) => {
+			if (b.healingType === 'temporaryHealing') {
+				acc.temp = Math.floor(acc.temp + b.healing);
+			} else acc.heal = Math.floor(acc.heal + b.healing);
+			return acc;
+		},
+		{ heal: 0, temp: 0 }
+	);
 	$: hp = targetFlag?.hp ?? $target?.actor.system.attributes.hp.value;
+	$: tempHp = $target?.actor.system.attributes.hp.temp;
 </script>
 
 <div class="healing-section">
@@ -53,10 +74,10 @@
 			<div class="healing__container">
 				<span class="healing-data">
 					{localize(A5E.healingTypes[healingType] ?? healingType)}
-					({Math.floor(healingOption[idx])})
+					({Math.floor(healingOption[idx]?.healing)})
 				</span>
 
-				<select class="multiplier" bind:value={healingOption[idx]}>
+				<select class="multiplier" bind:value={healingOption[idx].healing}>
 					<option value={healing * 0}>None</option>
 					<option value={healing}>Base</option>
 				</select>
@@ -68,11 +89,22 @@
 
 	<div class="healing__container">
 		<span class="healing-data" style="font-size: 0.833rem;">
-			Hp:
-			<span style="color: #425f65">{hp + totalHealing}</span>
-			➡ [
-			<span style="color: #772020;">{hp}</span>
-			+ {totalHealing} ]
+			{#if totalHealing.heal}
+				Hp:
+				<span style="color: #425f65">{hp + totalHealing.heal}</span>
+				➡ [
+				<span style="color: #772020;">{hp}</span>
+				+ {totalHealing.heal} ]
+				<br />
+			{/if}
+
+			{#if totalHealing.temp}
+				Temp Hp:
+				<span style="color: #425f65">{tempHp + totalHealing.temp}</span>
+				➡ [
+				<span style="color: #772020;">{tempHp}</span>
+				+ {totalHealing.temp} ]
+			{/if}
 		</span>
 
 		<select
