@@ -12,15 +12,23 @@
 	const { A5E } = CONFIG;
 
 	let targetFlag = cardData.targetData?.damage?.[$target?.id];
-	let damageOption = damageData.map(({ damage }) => damage);
 
 	function updateDamageOptions(event) {
-		const value = Number(event.value);
-		damageOption = damageData.map(({ damage }) => damage * value);
+		damageData.forEach(damageSource => {
+			damageSource.multiplier = Number(event.value);
+		});
+
+		damageData = damageData;
 	}
 
 	function applyDamage() {
-		$target.actor.applyDamage(totalDamage);
+		$target.actor.applyBulkDamage(
+			damageData.map(({ damage, damageType, multiplier }) => [
+				Math.floor(damage * multiplier),
+				damageType,
+			]),
+		);
+
 		$message.update({
 			[`flags.${moduleName}.targetData.damage.${$target?.id}`]: {
 				hp: $target.actor.system.attributes.hp.value,
@@ -41,26 +49,31 @@
 		});
 	}
 
-	$: reactive = targetFlag?.hp ? false : true;
-	$: totalDamage = Math.floor(damageOption.reduce((a, b) => a + b, 0));
 	$: hp = targetFlag?.hp ?? $target?.actor.system.attributes.hp.value;
+	$: reactive = targetFlag?.hp ? false : true;
+
+	$: totalDamage = damageData.reduce(
+		(cumulativeDamage, { damage, multiplier }) =>
+			cumulativeDamage + Math.floor(damage * multiplier),
+		0,
+	);
 </script>
 
 <div class="damage-section">
 	{#if $target}
-		{#each damageData as { canCrit, damage, damageType }, idx}
+		{#each damageData as { damage, damageType, multiplier }}
 			<div class="damage__container">
 				<span class="damage-data">
 					{localize(A5E.damageTypes[damageType] ?? damageType)}
-					({Math.floor(damageOption[idx])})
+					({Math.floor(damage * multiplier)})
 				</span>
 
-				<select class="multiplier" bind:value={damageOption[idx]}>
-					<option value={damage * 0}>None</option>
-					<option value={damage}>Base</option>
-					<option value={damage * 2}>2</option>
-					<option value={damage * 0.5}>1/2</option>
-					<option value={damage * 0.25}>1/4</option>
+				<select class="multiplier" bind:value={multiplier}>
+					<option value={0}>None</option>
+					<option value={1}>Base</option>
+					<option value={2}>2</option>
+					<option value={0.5}>1/2</option>
+					<option value={0.25}>1/4</option>
 				</select>
 			</div>
 		{/each}
@@ -88,11 +101,19 @@
 				<option value={0.25}>1/4</option>
 			</select>
 
-			<button class="apply-button" on:click={applyDamage} disabled={!reactive}>
+			<button
+				class="apply-button"
+				on:click={applyDamage}
+				disabled={!reactive}
+			>
 				<i class="fas fa-check" />
 			</button>
 
-			<button class="reset-button" on:click={resetDamage} disabled={reactive}>
+			<button
+				class="reset-button"
+				on:click={resetDamage}
+				disabled={reactive}
+			>
 				<i class="fas fa-undo" />
 			</button>
 		</div>

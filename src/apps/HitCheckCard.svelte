@@ -14,7 +14,10 @@
 	let cardData = $message.flags?.[moduleName];
 
 	const attackData = cardData.attackData;
-	const damageData = cardData.damageData;
+	const damageData = cardData.damageData.map(damageSource => ({
+		...damageSource,
+		multiplier: 1,
+	}));
 	const healingData = cardData.healingData;
 
 	const attacker = new TJSDocument(fromUuidSync(cardData.actorId));
@@ -22,7 +25,7 @@
 		.map(t => [t, fromUuidSync(t)])
 		.filter(([_, t]) => t);
 	const targets = new Map(
-		tokens.map(([id, token]) => [id, new TJSDocument(token)])
+		tokens.map(([id, token]) => [id, new TJSDocument(token)]),
 	);
 
 	const reducer = new DynMapReducer(targets);
