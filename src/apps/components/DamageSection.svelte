@@ -110,10 +110,10 @@
 		<hr class="a5e-rule u-pt-md" />
 
 		<div class="damage__container">
-			<span class="damage-data" style="font-size: 0.833rem;">
+			<span class="damage-data">
 				Hp:
 				<span style="color: #772020;">{hp - totalDamage}</span>
-				➡ [
+				<i class="fas fa-arrow-right-long" /> [
 				<span style="color: #425f65;">{hp}</span>
 				- {totalDamage} ]
 			</span>
@@ -170,7 +170,11 @@
 		}
 	}
 	.damage-data {
+		display: flex;
+		align-items: center;
+		gap: 0.5ch;
 		flex-grow: 1;
+		font-size: 0.833rem;
 	}
 
 	.multiplier {
