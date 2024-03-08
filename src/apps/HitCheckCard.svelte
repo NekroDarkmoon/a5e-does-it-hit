@@ -14,16 +14,15 @@
 	let cardData = $message.flags?.[moduleName];
 
 	const attackData = cardData.attackData;
-	const damageData = cardData.damageData.map(damageSource => ({
-		...damageSource,
-		multiplier: 1,
-	}));
+	const damageData = cardData.damageData;
 	const healingData = cardData.healingData;
 
 	const attacker = new TJSDocument(fromUuidSync(cardData.actorId));
+
 	const tokens = cardData.targets
 		.map(t => [t, fromUuidSync(t)])
 		.filter(([_, t]) => t);
+
 	const targets = new Map(
 		tokens.map(([id, token]) => [id, new TJSDocument(token)]),
 	);

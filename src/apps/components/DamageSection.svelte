@@ -14,9 +14,16 @@
 	let targetFlag = cardData.targetData?.damage?.[$target?.id];
 
 	function updateDamageOptions(event) {
-		damageData.forEach(damageSource => {
-			damageSource.multiplier = Number(event.value);
-		});
+		if (event.value === 'auto') {
+			damageData.forEach(damageSource => {
+				damageSource.multiplier =
+					getDefaultMultiplierForDamageType(damageSource);
+			});
+		} else {
+			damageData.forEach(damageSource => {
+				damageSource.multiplier = Number(event.value);
+			});
+		}
 
 		damageData = damageData;
 	}
@@ -38,6 +45,23 @@
 		});
 	}
 
+	function getDefaultMultiplierForDamageType(damageSource) {
+		const { damageImmunities, damageResistances, damageVulnerabilities } =
+			$target.actor?.system.traits;
+
+		let multiplier = 1;
+
+		if (damageVulnerabilities?.includes(damageSource.damageType)) {
+			multiplier = 2;
+		} else if (damageResistances?.includes(damageSource.damageType)) {
+			multiplier = 0.5;
+		} else if (damageImmunities?.includes(damageSource.damageType)) {
+			multiplier = 0;
+		}
+
+		return multiplier;
+	}
+
 	function resetDamage() {
 		const undoDamage = targetFlag?.damage ?? 0;
 		$target.actor.applyHealing(undoDamage);
@@ -48,6 +72,11 @@
 			},
 		});
 	}
+
+	damageData = damageData.map(damageSource => ({
+		...damageSource,
+		multiplier: getDefaultMultiplierForDamageType(damageSource),
+	}));
 
 	$: hp = targetFlag?.hp ?? $target?.actor.system.attributes.hp.value;
 	$: reactive = targetFlag?.hp ? false : true;
@@ -94,8 +123,9 @@
 				style="font-size: 0.833rem; height: 1.25rem;"
 				on:change={({ target }) => updateDamageOptions(target)}
 			>
+				<option value={'auto'} selected>Auto</option>
 				<option value={0}>None</option>
-				<option value={1} selected>Base</option>
+				<option value={1}>Base</option>
 				<option value={2}>2</option>
 				<option value={0.5}>1/2</option>
 				<option value={0.25}>1/4</option>
