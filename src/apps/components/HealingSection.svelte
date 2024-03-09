@@ -26,10 +26,12 @@
 	}
 
 	function applyHealing() {
-		const temp = totalHealing.temp;
-		const heal = totalHealing.heal;
-		$target.actor.applyHealing(heal);
-		$target.actor.applyHealing(temp, { temp: true });
+		$target.actor.applyBulkHealing(
+			healingOption.map(({ healing, healingType }) => [
+				healing,
+				healingType,
+			]),
+		);
 
 		$message.update({
 			[`flags.${moduleName}.targetData.healing.${$target?.id}`]: {
@@ -62,7 +64,7 @@
 			} else acc.heal = Math.floor(acc.heal + b.healing);
 			return acc;
 		},
-		{ heal: 0, temp: 0 }
+		{ heal: 0, temp: 0 },
 	);
 	$: hp = targetFlag?.hp ?? $target?.actor.system.attributes.hp.value;
 	$: tempHp = $target?.actor.system.attributes.hp.temp;
@@ -77,7 +79,10 @@
 					({Math.floor(healingOption[idx]?.healing)})
 				</span>
 
-				<select class="multiplier" bind:value={healingOption[idx].healing}>
+				<select
+					class="multiplier"
+					bind:value={healingOption[idx].healing}
+				>
 					<option value={healing * 0}>None</option>
 					<option value={healing}>Base</option>
 				</select>
@@ -116,11 +121,19 @@
 			<option value={1} selected>Base</option>
 		</select>
 
-		<button class="apply-button" on:click={applyHealing} disabled={!reactive}>
+		<button
+			class="apply-button"
+			on:click={applyHealing}
+			disabled={!reactive}
+		>
 			<i class="fas fa-check" />
 		</button>
 
-		<button class="reset-button" on:click={resetHealing} disabled={reactive}>
+		<button
+			class="reset-button"
+			on:click={resetHealing}
+			disabled={reactive}
+		>
 			<i class="fas fa-undo" />
 		</button>
 	</div>
