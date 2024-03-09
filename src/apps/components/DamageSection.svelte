@@ -162,13 +162,14 @@
 		display: flex;
 		gap: 0.25rem;
 		align-items: center;
-		padding-inline: 0.25rem;
-		padding-block: 0.25rem;
+		padding: 0.25rem;
+		padding-bottom: 0;
 
 		&:nth-child(odd):not(:last-child) {
 			background-color: #dedcd7;
 		}
 	}
+
 	.damage-data {
 		display: flex;
 		align-items: center;
