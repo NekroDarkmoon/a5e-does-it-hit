@@ -12,15 +12,30 @@
 	const { A5E } = CONFIG;
 
 	let targetFlag = cardData.targetData?.damage?.[$target?.id];
-	let damageOption = damageData.map(({ damage }) => damage);
 
 	function updateDamageOptions(event) {
-		const value = Number(event.value);
-		damageOption = damageData.map(({ damage }) => damage * value);
+		if (event.value === 'auto') {
+			damageData.forEach(damageSource => {
+				damageSource.multiplier =
+					getDefaultMultiplierForDamageType(damageSource);
+			});
+		} else {
+			damageData.forEach(damageSource => {
+				damageSource.multiplier = Number(event.value);
+			});
+		}
+
+		damageData = damageData;
 	}
 
 	function applyDamage() {
-		$target.actor.applyDamage(totalDamage);
+		$target.actor.applyBulkDamage(
+			damageData.map(({ damage, damageType, multiplier }) => [
+				Math.floor(damage * multiplier),
+				damageType,
+			]),
+		);
+
 		$message.update({
 			[`flags.${moduleName}.targetData.damage.${$target?.id}`]: {
 				hp: $target.actor.system.attributes.hp.value,
@@ -28,6 +43,23 @@
 				damage: totalDamage,
 			},
 		});
+	}
+
+	function getDefaultMultiplierForDamageType(damageSource) {
+		const { damageImmunities, damageResistances, damageVulnerabilities } =
+			$target.actor?.system.traits;
+
+		let multiplier = 1;
+
+		if (damageVulnerabilities?.includes(damageSource.damageType)) {
+			multiplier = 2;
+		} else if (damageResistances?.includes(damageSource.damageType)) {
+			multiplier = 0.5;
+		} else if (damageImmunities?.includes(damageSource.damageType)) {
+			multiplier = 0;
+		}
+
+		return multiplier;
 	}
 
 	function resetDamage() {
@@ -41,26 +73,36 @@
 		});
 	}
 
-	$: reactive = targetFlag?.hp ? false : true;
-	$: totalDamage = Math.floor(damageOption.reduce((a, b) => a + b, 0));
+	damageData = damageData.map(damageSource => ({
+		...damageSource,
+		multiplier: getDefaultMultiplierForDamageType(damageSource),
+	}));
+
 	$: hp = targetFlag?.hp ?? $target?.actor.system.attributes.hp.value;
+	$: reactive = targetFlag?.hp ? false : true;
+
+	$: totalDamage = damageData.reduce(
+		(cumulativeDamage, { damage, multiplier }) =>
+			cumulativeDamage + Math.floor(damage * multiplier),
+		0,
+	);
 </script>
 
 <div class="damage-section">
 	{#if $target}
-		{#each damageData as { canCrit, damage, damageType }, idx}
+		{#each damageData as { damage, damageType, multiplier }}
 			<div class="damage__container">
 				<span class="damage-data">
 					{localize(A5E.damageTypes[damageType] ?? damageType)}
-					({Math.floor(damageOption[idx])})
+					({Math.floor(damage * multiplier)})
 				</span>
 
-				<select class="multiplier" bind:value={damageOption[idx]}>
-					<option value={damage * 0}>None</option>
-					<option value={damage}>Base</option>
-					<option value={damage * 2}>2</option>
-					<option value={damage * 0.5}>1/2</option>
-					<option value={damage * 0.25}>1/4</option>
+				<select class="multiplier" bind:value={multiplier}>
+					<option value={0}>None</option>
+					<option value={1}>Base</option>
+					<option value={2}>2</option>
+					<option value={0.5}>1/2</option>
+					<option value={0.25}>1/4</option>
 				</select>
 			</div>
 		{/each}
@@ -68,10 +110,10 @@
 		<hr class="a5e-rule u-pt-md" />
 
 		<div class="damage__container">
-			<span class="damage-data" style="font-size: 0.833rem;">
+			<span class="damage-data">
 				Hp:
 				<span style="color: #772020;">{hp - totalDamage}</span>
-				➡ [
+				<i class="fas fa-arrow-right-long" /> [
 				<span style="color: #425f65;">{hp}</span>
 				- {totalDamage} ]
 			</span>
@@ -81,18 +123,27 @@
 				style="font-size: 0.833rem; height: 1.25rem;"
 				on:change={({ target }) => updateDamageOptions(target)}
 			>
+				<option value={'auto'} selected>Auto</option>
 				<option value={0}>None</option>
-				<option value={1} selected>Base</option>
+				<option value={1}>Base</option>
 				<option value={2}>2</option>
 				<option value={0.5}>1/2</option>
 				<option value={0.25}>1/4</option>
 			</select>
 
-			<button class="apply-button" on:click={applyDamage} disabled={!reactive}>
+			<button
+				class="apply-button"
+				on:click={applyDamage}
+				disabled={!reactive}
+			>
 				<i class="fas fa-check" />
 			</button>
 
-			<button class="reset-button" on:click={resetDamage} disabled={reactive}>
+			<button
+				class="reset-button"
+				on:click={resetDamage}
+				disabled={reactive}
+			>
 				<i class="fas fa-undo" />
 			</button>
 		</div>
@@ -119,7 +170,11 @@
 		}
 	}
 	.damage-data {
+		display: flex;
+		align-items: center;
+		gap: 0.5ch;
 		flex-grow: 1;
+		font-size: 0.833rem;
 	}
 
 	.multiplier {

@@ -1,8 +1,8 @@
 # Does it Hit?! (A5E)
 
-![](https://shields.io/badge/Foundry-v9-informational)
-![Latest Release Download Count](https://img.shields.io/github/downloads/NekroDarkmoon/does-it-hit-a5e/latest/module.zip)
-[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fdoes-it-hit-a5e&colorB=4aa94a)](https://forge-vtt.com/bazaar#package=does-it-hit-a5e)
+![](https://shields.io/badge/Foundry-v11-informational)
+![Latest Release Download Count](https://img.shields.io/github/downloads/NekroDarkmoon/a5e-does-it-hit/latest/a5e-does-it-hit.zip)
+[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fa5e-does-it-hit&colorB=4aa94a)](https://forge-vtt.com/bazaar#package=a5e-does-it-hit)
 
 <br />
 
