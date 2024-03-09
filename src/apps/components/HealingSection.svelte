@@ -46,8 +46,8 @@
 		const temp = targetFlag?.healing?.temp ?? 0;
 		const heal = targetFlag?.healing?.heal ?? 0;
 
-		if (tempHp > 0) $target.actor.applyDamage(temp);
-		$target.actor.applyDamage(heal);
+		if (tempHp > 0) $target.actor.applyBulkDamage([[temp], [heal]]);
+		else $target.actor.applyDamage(heal);
 
 		$message.update({
 			[`flags.${moduleName}.targetData.healing`]: {
