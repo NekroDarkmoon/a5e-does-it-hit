@@ -26,10 +26,12 @@
 	}
 
 	function applyHealing() {
-		const temp = totalHealing.temp;
-		const heal = totalHealing.heal;
-		$target.actor.applyHealing(heal);
-		$target.actor.applyHealing(temp, { temp: true });
+		$target.actor.applyBulkHealing(
+			healingOption.map(({ healing, healingType }) => [
+				healing,
+				healingType,
+			]),
+		);
 
 		$message.update({
 			[`flags.${moduleName}.targetData.healing.${$target?.id}`]: {
@@ -44,8 +46,8 @@
 		const temp = targetFlag?.healing?.temp ?? 0;
 		const heal = targetFlag?.healing?.heal ?? 0;
 
-		if (tempHp > 0) $target.actor.applyDamage(temp);
-		$target.actor.applyDamage(heal);
+		if (tempHp > 0) $target.actor.applyBulkDamage([[temp], [heal]]);
+		else $target.actor.applyDamage(heal);
 
 		$message.update({
 			[`flags.${moduleName}.targetData.healing`]: {
@@ -62,7 +64,7 @@
 			} else acc.heal = Math.floor(acc.heal + b.healing);
 			return acc;
 		},
-		{ heal: 0, temp: 0 }
+		{ heal: 0, temp: 0 },
 	);
 	$: hp = targetFlag?.hp ?? $target?.actor.system.attributes.hp.value;
 	$: tempHp = $target?.actor.system.attributes.hp.temp;
@@ -77,7 +79,10 @@
 					({Math.floor(healingOption[idx]?.healing)})
 				</span>
 
-				<select class="multiplier" bind:value={healingOption[idx].healing}>
+				<select
+					class="multiplier"
+					bind:value={healingOption[idx].healing}
+				>
 					<option value={healing * 0}>None</option>
 					<option value={healing}>Base</option>
 				</select>
@@ -116,11 +121,19 @@
 			<option value={1} selected>Base</option>
 		</select>
 
-		<button class="apply-button" on:click={applyHealing} disabled={!reactive}>
+		<button
+			class="apply-button"
+			on:click={applyHealing}
+			disabled={!reactive}
+		>
 			<i class="fas fa-check" />
 		</button>
 
-		<button class="reset-button" on:click={resetHealing} disabled={reactive}>
+		<button
+			class="reset-button"
+			on:click={resetHealing}
+			disabled={reactive}
+		>
 			<i class="fas fa-undo" />
 		</button>
 	</div>
@@ -136,13 +149,14 @@
 		display: flex;
 		gap: 0.25rem;
 		align-items: center;
-		padding-inline: 0.25rem;
-		padding-block: 0.25rem;
+		padding: 0.25rem;
+		padding-bottom: 0;
 
 		&:nth-child(odd):not(:last-child) {
 			background-color: #dedcd7;
 		}
 	}
+
 	.healing-data {
 		flex-grow: 1;
 	}
