@@ -4,7 +4,8 @@
 	export let cardData;
 
 	const hit = () =>
-		attackData.isCrit || attackData.rollTotal >= ac ? true : false;
+		!attackData.isFumble &&
+		(attackData.isCrit || attackData.rollTotal >= ac);
 
 	let targetFlag = cardData.targetData?.[$target?.id];
 	$: ac = targetFlag?.ac ?? $target?.actor.system.attributes.ac.value ?? 0;
@@ -27,6 +28,7 @@
 				class="dih-hit-section__roll"
 				class:dih-hit-section__roll--hit={hit()}
 				class:dih-hit-section__roll--crit={attackData.isCrit}
+				class:dih-hit-section__roll--fumble={attackData.isFumble}
 			>
 				{attackData.rollTotal ?? ''}
 			</div>
@@ -74,6 +76,7 @@
 				bottom: 0;
 				font-size: 0.694rem;
 				color: var(--accent-text-color);
+				white-space: nowrap;
 			}
 
 			&--hit {
@@ -87,6 +90,10 @@
 
 			&--crit::after {
 				content: 'CRIT';
+			}
+
+			&--fumble::after {
+				content: 'FUMBLE';
 			}
 		}
 
