@@ -50,7 +50,7 @@
 		font-size: 1rem;
 
 		&__roll {
-			--accent-text-color: rgba(168, 3, 0);
+			--text-color: rgba(168, 3, 0);
 			--die-background-color: rgba(168, 3, 0);
 
 			grid-area: hitRoll;
@@ -58,6 +58,7 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			color: var(--text-color);
 			height: 100%;
 			font-weight: bold;
 
@@ -75,12 +76,11 @@
 				position: absolute;
 				bottom: 0;
 				font-size: 0.694rem;
-				color: var(--accent-text-color);
 				white-space: nowrap;
 			}
 
 			&--hit {
-				--accent-text-color: rgb(24, 82, 11);
+				--text-color: rgb(24, 82, 11);
 				--die-background-color: rgba(24, 82, 11);
 
 				&::after {
