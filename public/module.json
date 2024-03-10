@@ -4,7 +4,7 @@
   "description": "",
   "version": "This is auto replaced",
   "library": "false",
-  "manifestPlusVersion": "1.0.0",
+  "manifestPlusVersion": "1.2.0",
   "compatibility": {
     "minimum": 10,
     "verified": 11,
@@ -15,7 +15,16 @@
       "name": "NekroDarkmoon",
       "url": "https://github.com/NekroDarkmoon/",
       "discord": "Nekro Darkmoon#2995",
-      "ko-fi": "https://ko-fi.com/nekrodarkmoon"
+      "ko-fi": "https://ko-fi.com/nekrodarkmoon",
+      "patreon": "ForgemasterModules"
+    },
+    {
+      "name": "Phillip Best",
+      "url": "https://bio.link/philbest",
+      "email": "me@phillip.best",
+      "discord": "philbest",
+      "ko-fi": "philbest",
+      "patreon": "ForgemasterModules"
     }
   ],
   "relationships": {
