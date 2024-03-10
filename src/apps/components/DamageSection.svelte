@@ -131,21 +131,15 @@
 				<option value={0.25}>1/4</option>
 			</select>
 
-			<button
-				class="apply-button"
-				on:click={applyDamage}
-				disabled={!reactive}
-			>
-				<i class="fas fa-check" />
-			</button>
-
-			<button
-				class="reset-button"
-				on:click={resetDamage}
-				disabled={reactive}
-			>
-				<i class="fas fa-undo" />
-			</button>
+			{#if reactive}
+				<button class="apply-button" on:click={applyDamage}>
+					<i class="fas fa-check" />
+				</button>
+			{:else}
+				<button class="reset-button" on:click={resetDamage}>
+					<i class="fas fa-undo" />
+				</button>
+			{/if}
 		</div>
 	{:else}
 		Target has been deleted.
@@ -164,6 +158,10 @@
 		align-items: center;
 		padding: 0.25rem;
 		padding-bottom: 0;
+	}
+
+	.damage-data {
+		flex-grow: 1;
 	}
 
 	.dih-damage-row {
