@@ -48,8 +48,8 @@
 		font-size: 1rem;
 
 		&__roll {
-			--die-background-color: rgba(168, 3, 0, 0.2);
-			--accent-text-color: rgb(168, 3, 0);
+			--accent-text-color: rgba(168, 3, 0);
+			--die-background-color: rgba(168, 3, 0);
 
 			grid-area: hitRoll;
 			position: relative;
@@ -65,6 +65,7 @@
 				font-family: 'Font Awesome 6 Pro';
 				color: var(--die-background-color);
 				font-size: 2rem;
+				opacity: 0.15;
 			}
 
 			&::after {
@@ -76,8 +77,8 @@
 			}
 
 			&--hit {
-				--die-background-color: rgba(24, 82, 11, 0.2);
-				--accent-text-color: rgba(24, 82, 11);
+				--accent-text-color: rgb(24, 82, 11);
+				--die-background-color: rgba(24, 82, 11);
 
 				&::after {
 					content: 'HIT';

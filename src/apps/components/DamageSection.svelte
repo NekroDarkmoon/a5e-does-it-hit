@@ -91,8 +91,8 @@
 <div class="damage-section">
 	{#if $target}
 		{#each damageData as { damage, damageType, multiplier }}
-			<div class="damage__container">
-				<span class="damage-data">
+			<div class="dih-damage-row">
+				<span class="dih-damage-row__data">
 					{localize(A5E.damageTypes[damageType] ?? damageType)}
 					({Math.floor(damage * multiplier)})
 				</span>
@@ -164,18 +164,24 @@
 		align-items: center;
 		padding: 0.25rem;
 		padding-bottom: 0;
-
-		&:nth-child(odd):not(:last-child) {
-			background-color: #dedcd7;
-		}
 	}
 
-	.damage-data {
+	.dih-damage-row {
 		display: flex;
-		align-items: center;
-		gap: 0.5ch;
-		flex-grow: 1;
+		padding: 0.25rem 0.25rem;
 		font-size: 0.833rem;
+
+		&:nth-child(odd) {
+			background-color: #dedcd7;
+		}
+
+		&__data {
+			display: flex;
+			align-items: center;
+			gap: 0.5ch;
+			flex-grow: 1;
+			font-size: 0.833rem;
+		}
 	}
 
 	.multiplier {
