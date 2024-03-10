@@ -73,8 +73,8 @@
 <div class="healing-section">
 	{#if $target}
 		{#each healingData as { healingType, healing }, idx}
-			<div class="healing__container">
-				<span class="healing-data">
+			<div class="dih-healing-row">
+				<span class="dih-healing-row__data">
 					{localize(A5E.healingTypes[healingType] ?? healingType)}
 					({Math.floor(healingOption[idx]?.healing)})
 				</span>
@@ -121,21 +121,15 @@
 			<option value={1} selected>Base</option>
 		</select>
 
-		<button
-			class="apply-button"
-			on:click={applyHealing}
-			disabled={!reactive}
-		>
-			<i class="fas fa-check" />
-		</button>
-
-		<button
-			class="reset-button"
-			on:click={resetHealing}
-			disabled={reactive}
-		>
-			<i class="fas fa-undo" />
-		</button>
+		{#if reactive}
+			<button class="apply-button" on:click={applyHealing}>
+				<i class="fas fa-check" />
+			</button>
+		{:else}
+			<button class="reset-button" on:click={resetHealing}>
+				<i class="fas fa-undo" />
+			</button>
+		{/if}
 	</div>
 </div>
 
@@ -151,9 +145,23 @@
 		align-items: center;
 		padding: 0.25rem;
 		padding-bottom: 0;
+	}
 
-		&:nth-child(odd):not(:last-child) {
+	.dih-healing-row {
+		display: flex;
+		padding: 0.25rem 0.25rem;
+		font-size: 0.833rem;
+
+		&:nth-child(odd) {
 			background-color: #dedcd7;
+		}
+
+		&__data {
+			display: flex;
+			align-items: center;
+			gap: 0.5ch;
+			flex-grow: 1;
+			font-size: 0.833rem;
 		}
 	}
 
