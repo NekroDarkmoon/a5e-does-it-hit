@@ -130,11 +130,11 @@
 			</select>
 
 			{#if reactive}
-				<button class="apply-button" on:click={applyDamage}>
+				<button on:click={applyDamage}>
 					<i class="fas fa-check" />
 				</button>
 			{:else}
-				<button class="reset-button" on:click={resetDamage}>
+				<button on:click={resetDamage}>
 					<i class="fas fa-undo" />
 				</button>
 			{/if}
