@@ -3,7 +3,8 @@
 	export let attackData;
 	export let cardData;
 
-	const hit = () => (attackData.rollTotal >= ac ? true : false);
+	const hit = () =>
+		attackData.isCrit || attackData.rollTotal >= ac ? true : false;
 
 	let targetFlag = cardData.targetData?.[$target?.id];
 	$: ac = targetFlag?.ac ?? $target?.actor.system.attributes.ac.value ?? 0;
