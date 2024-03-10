@@ -93,10 +93,8 @@
 		<ul class="dih-roll-list">
 			{#each damageData as { damage, damageType, multiplier }}
 				<li class="dih-roll-list__row">
-					<span class="dih-damage-row__data">
-						{localize(A5E.damageTypes[damageType] ?? damageType)}
-						({Math.floor(damage * multiplier)})
-					</span>
+					{localize(A5E.damageTypes[damageType] ?? damageType)}
+					({Math.floor(damage * multiplier)})
 
 					<select class="multiplier" bind:value={multiplier}>
 						<option value={0}>None</option>
@@ -162,14 +160,6 @@
 
 	.damage-data {
 		flex-grow: 1;
-	}
-
-	.dih-damage-row__data {
-		display: flex;
-		align-items: center;
-		gap: 0.5ch;
-		flex-grow: 1;
-		font-size: 0.833rem;
 	}
 
 	.multiplier {

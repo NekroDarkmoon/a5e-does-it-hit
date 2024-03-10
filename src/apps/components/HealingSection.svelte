@@ -75,10 +75,8 @@
 		<ul class="dih-roll-list">
 			{#each healingData as { healingType, healing }, idx}
 				<li class="dih-roll-list__row">
-					<span class="dih-healing-row__data">
-						{localize(A5E.healingTypes[healingType] ?? healingType)}
-						({Math.floor(healingOption[idx]?.healing)})
-					</span>
+					{localize(A5E.healingTypes[healingType] ?? healingType)}
+					({Math.floor(healingOption[idx]?.healing)})
 
 					<select
 						class="multiplier"
@@ -145,14 +143,6 @@
 		align-items: center;
 		padding: 0.25rem;
 		padding-bottom: 0;
-	}
-
-	.dih-healing-row__data {
-		display: flex;
-		align-items: center;
-		gap: 0.5ch;
-		flex-grow: 1;
-		font-size: 0.833rem;
 	}
 
 	.healing-data {
