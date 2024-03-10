@@ -90,24 +90,24 @@
 
 <div class="damage-section">
 	{#if $target}
-		{#each damageData as { damage, damageType, multiplier }}
-			<div class="dih-damage-row">
-				<span class="dih-damage-row__data">
-					{localize(A5E.damageTypes[damageType] ?? damageType)}
-					({Math.floor(damage * multiplier)})
-				</span>
+		<ul class="dih-roll-list">
+			{#each damageData as { damage, damageType, multiplier }}
+				<li class="dih-roll-list__row">
+					<span class="dih-damage-row__data">
+						{localize(A5E.damageTypes[damageType] ?? damageType)}
+						({Math.floor(damage * multiplier)})
+					</span>
 
-				<select class="multiplier" bind:value={multiplier}>
-					<option value={0}>None</option>
-					<option value={1}>Base</option>
-					<option value={2}>2</option>
-					<option value={0.5}>1/2</option>
-					<option value={0.25}>1/4</option>
-				</select>
-			</div>
-		{/each}
-
-		<hr class="a5e-rule u-pt-md" />
+					<select class="multiplier" bind:value={multiplier}>
+						<option value={0}>None</option>
+						<option value={1}>Base</option>
+						<option value={2}>2</option>
+						<option value={0.5}>1/2</option>
+						<option value={0.25}>1/4</option>
+					</select>
+				</li>
+			{/each}
+		</ul>
 
 		<div class="damage__container">
 			<span class="damage-data">
@@ -164,22 +164,12 @@
 		flex-grow: 1;
 	}
 
-	.dih-damage-row {
+	.dih-damage-row__data {
 		display: flex;
-		padding: 0.25rem 0.25rem;
+		align-items: center;
+		gap: 0.5ch;
+		flex-grow: 1;
 		font-size: 0.833rem;
-
-		&:nth-child(odd) {
-			background-color: #dedcd7;
-		}
-
-		&__data {
-			display: flex;
-			align-items: center;
-			gap: 0.5ch;
-			flex-grow: 1;
-			font-size: 0.833rem;
-		}
 	}
 
 	.multiplier {

@@ -72,24 +72,24 @@
 
 <div class="healing-section">
 	{#if $target}
-		{#each healingData as { healingType, healing }, idx}
-			<div class="dih-healing-row">
-				<span class="dih-healing-row__data">
-					{localize(A5E.healingTypes[healingType] ?? healingType)}
-					({Math.floor(healingOption[idx]?.healing)})
-				</span>
+		<ul class="dih-roll-list">
+			{#each healingData as { healingType, healing }, idx}
+				<li class="dih-roll-list__row">
+					<span class="dih-healing-row__data">
+						{localize(A5E.healingTypes[healingType] ?? healingType)}
+						({Math.floor(healingOption[idx]?.healing)})
+					</span>
 
-				<select
-					class="multiplier"
-					bind:value={healingOption[idx].healing}
-				>
-					<option value={healing * 0}>None</option>
-					<option value={healing}>Base</option>
-				</select>
-			</div>
-		{/each}
-
-		<hr class="a5e-rule u-pt-md" />
+					<select
+						class="multiplier"
+						bind:value={healingOption[idx].healing}
+					>
+						<option value={healing * 0}>None</option>
+						<option value={healing}>Base</option>
+					</select>
+				</li>
+			{/each}
+		</ul>
 	{/if}
 
 	<div class="healing__container">
@@ -147,22 +147,12 @@
 		padding-bottom: 0;
 	}
 
-	.dih-healing-row {
+	.dih-healing-row__data {
 		display: flex;
-		padding: 0.25rem 0.25rem;
+		align-items: center;
+		gap: 0.5ch;
+		flex-grow: 1;
 		font-size: 0.833rem;
-
-		&:nth-child(odd) {
-			background-color: #dedcd7;
-		}
-
-		&__data {
-			display: flex;
-			align-items: center;
-			gap: 0.5ch;
-			flex-grow: 1;
-			font-size: 0.833rem;
-		}
 	}
 
 	.healing-data {

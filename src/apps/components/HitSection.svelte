@@ -74,7 +74,7 @@
 			&::after {
 				content: 'MISS';
 				position: absolute;
-				bottom: -2px;
+				bottom: -1px;
 				font-size: 0.694rem;
 				white-space: nowrap;
 			}
