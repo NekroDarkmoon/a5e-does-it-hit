@@ -149,7 +149,7 @@
 <style lang="scss">
 	.healing-section {
 		display: grid;
-		font-size: 0.694rem;
+		font-size: 0.833rem;
 	}
 
 	.healing__container {
@@ -162,11 +162,6 @@
 
 	.healing-data {
 		flex-grow: 1;
-	}
-
-	.multiplier {
-		font-size: 0.694rem;
-		height: 1rem;
 	}
 
 	button {

@@ -155,7 +155,7 @@
 <style lang="scss">
 	.damage-section {
 		display: grid;
-		font-size: 0.694rem;
+		font-size: 0.833rem;
 	}
 
 	.damage__container {
