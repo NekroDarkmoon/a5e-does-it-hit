@@ -97,7 +97,7 @@
 	{/if}
 
 	<div class="healing__container">
-		<span class="healing-data" style="font-size: 0.833rem;">
+		<span class="healing-data">
 			{#if totalHealing.heal}
 				Hp:
 				<span style="color: #425f65">
