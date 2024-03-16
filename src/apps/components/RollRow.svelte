@@ -39,7 +39,7 @@
 		padding: 0.125rem 0.25rem;
 		text-align: center;
 		border-radius: 3px;
-		border: 0.5px solid var(--dih-roll-color);
+		border: 0.5px solid var(--dih-roll-color, #ccc);
 		overflow: hidden;
 
 		&::after {
@@ -49,7 +49,7 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background: var(--dih-roll-color, #ccc);
+			background: var(--dih-roll-color, rgba(0, 0, 0, 0.05));
 			opacity: 0.3;
 		}
 	}

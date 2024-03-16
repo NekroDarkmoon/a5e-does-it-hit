@@ -104,7 +104,12 @@
 					{multiplier}
 					roll={damage}
 					type="damage"
-					--dih-roll-color={damageColors[damageType]}
+					--dih-roll-color={game.settings.get(
+						'a5e',
+						'enableDamageRollColors',
+					)
+						? damageColors[damageType]
+						: null}
 					on:updateSelection={event =>
 						updateSingleDamageMultiplier(event.detail, idx)}
 				/>
