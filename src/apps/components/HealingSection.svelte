@@ -15,11 +15,6 @@
 
 	let targetFlag = cardData.targetData?.healing?.[$target?.id];
 
-	let healingOption = healingData.map(({ healing, healingType }) => ({
-		healing,
-		healingType,
-	}));
-
 	function updateHealingOptions(event) {
 		healingData.forEach(healingSource => {
 			healingSource.multiplier = Number(event.value);
@@ -30,7 +25,7 @@
 
 	function applyHealing() {
 		$target.actor.applyBulkHealing(
-			healingOption.map(({ healing, healingType }) => [
+			healingData.map(({ healing, healingType, multiplier }) => [
 				Math.floor(healing * multiplier),
 				healingType,
 			]),
@@ -68,7 +63,7 @@
 	$: tempHp = $target?.actor.system.attributes.hp.temp;
 	$: reactive = targetFlag?.hp ? false : true;
 
-	$: totalHealing = healingOption.reduce(
+	$: totalHealing = healingData.reduce(
 		(cumulativeHealing, { healing, healingType, multiplier }) => {
 			const key = healingType === 'temporaryHealing' ? 'temp' : 'heal';
 			cumulativeHealing[key] += Math.floor(healing * multiplier);
