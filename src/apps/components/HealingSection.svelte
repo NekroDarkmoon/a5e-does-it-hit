@@ -15,11 +15,16 @@
 
 	let targetFlag = cardData.targetData?.healing?.[$target?.id];
 
-	function updateHealingOptions(event) {
+	function updateHealingMultipliers(newMultiplier) {
 		healingData.forEach(healingSource => {
-			healingSource.multiplier = Number(event.value);
+			healingSource.multiplier = Number(newMultiplier);
 		});
 
+		healingData = healingData;
+	}
+
+	function updateSingleHealingMultiplier(newMultiplier, index) {
+		healingData[index].multiplier = Number(newMultiplier);
 		healingData = healingData;
 	}
 
@@ -77,13 +82,15 @@
 <div class="healing-section">
 	{#if $target}
 		<ul class="dih-roll-list">
-			{#each healingData as { healingType, healing, multiplier }}
+			{#each healingData as { healingType, healing, multiplier }, idx}
 				<RollRow
 					label={localize(healingTypes[healingType] ?? healingType)}
 					{multiplier}
 					roll={healing}
 					type="healing"
 					--dih-roll-color={healingColors[healingType]}
+					on:updateSelection={event =>
+						updateSingleHealingMultiplier(event.detail, idx)}
 				/>
 			{/each}
 		</ul>
@@ -112,7 +119,7 @@
 		<select
 			class="multiplier"
 			style="font-size: 0.833rem; height: 1.25rem;"
-			on:change={({ target }) => updateHealingOptions(target)}
+			on:change={({ target }) => updateHealingMultipliers(target.value)}
 		>
 			<option value={0}>None</option>
 			<option value={1} selected>Base</option>

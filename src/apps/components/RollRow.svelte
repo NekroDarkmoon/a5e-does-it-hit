@@ -1,8 +1,12 @@
 <script>
+	import { createEventDispatcher } from 'svelte';
+
 	export let roll;
 	export let label;
 	export let multiplier;
 	export let type;
+
+	const dispatch = createEventDispatcher();
 </script>
 
 <li class="dih-roll-list__row">
@@ -12,7 +16,11 @@
 
 	{label}
 
-	<select class="multiplier" bind:value={multiplier}>
+	<select
+		class="multiplier"
+		bind:value={multiplier}
+		on:change={({ target }) => dispatch('updateSelection', target.value)}
+	>
 		<option value={0}>None</option>
 		<option value={1}>Base</option>
 

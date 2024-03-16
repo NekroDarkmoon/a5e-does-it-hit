@@ -15,18 +15,23 @@
 
 	let targetFlag = cardData.targetData?.damage?.[$target?.id];
 
-	function updateDamageOptions(event) {
-		if (event.value === 'auto') {
+	function updateDamageMultipliers(newMultiplier) {
+		if (newMultiplier === 'auto') {
 			damageData.forEach(damageSource => {
 				damageSource.multiplier =
 					getDefaultMultiplierForDamageType(damageSource);
 			});
 		} else {
 			damageData.forEach(damageSource => {
-				damageSource.multiplier = Number(event.value);
+				damageSource.multiplier = Number(newMultiplier);
 			});
 		}
 
+		damageData = damageData;
+	}
+
+	function updateSingleDamageMultiplier(newMultiplier, index) {
+		damageData[index].multiplier = Number(newMultiplier);
 		damageData = damageData;
 	}
 
@@ -93,13 +98,15 @@
 <div class="damage-section">
 	{#if $target}
 		<ul class="dih-roll-list">
-			{#each damageData as { damage, damageType, multiplier }}
+			{#each damageData as { damage, damageType, multiplier }, idx}
 				<RollRow
 					label={localize(damageTypes[damageType] ?? damageType)}
 					{multiplier}
 					roll={damage}
 					type="damage"
 					--dih-roll-color={damageColors[damageType]}
+					on:updateSelection={event =>
+						updateSingleDamageMultiplier(event.detail, idx)}
 				/>
 			{/each}
 		</ul>
@@ -116,7 +123,8 @@
 			<select
 				class="multiplier"
 				style="font-size: 0.833rem; height: 1.25rem;"
-				on:change={({ target }) => updateDamageOptions(target)}
+				on:change={({ target }) =>
+					updateDamageMultipliers(target.value)}
 			>
 				<option value={'auto'} selected>Auto</option>
 				<option value={0}>None</option>
