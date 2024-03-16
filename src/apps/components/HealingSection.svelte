@@ -100,8 +100,14 @@
 		<span class="healing-data" style="font-size: 0.833rem;">
 			{#if totalHealing.heal}
 				Hp:
-				<span style="color: #425f65">{hp + totalHealing.heal}</span>
-				➡ [
+				<span style="color: #425f65">
+					{Math.min(
+						$target?.actor?.system?.attributes?.hp?.max,
+						hp + totalHealing.heal,
+					)}
+				</span>
+
+				<i class="fas fa-arrow-right-long" /> [
 				<span style="color: #772020;">{hp}</span>
 				+ {totalHealing.heal} ]
 				<br />
@@ -109,8 +115,11 @@
 
 			{#if totalHealing.temp}
 				Temp Hp:
-				<span style="color: #425f65">{tempHp + totalHealing.temp}</span>
-				➡ [
+				<span style="color: #425f65">
+					{tempHp + totalHealing.temp}
+				</span>
+
+				<i class="fas fa-arrow-right-long" /> [
 				<span style="color: #772020;">{tempHp}</span>
 				+ {totalHealing.temp} ]
 			{/if}

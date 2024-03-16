@@ -114,7 +114,10 @@
 		<div class="damage__container">
 			<span class="damage-data">
 				Hp:
-				<span style="color: #772020;">{hp - totalDamage}</span>
+				<span style="color: #772020;">
+					{Math.max(0, hp - totalDamage)}
+				</span>
+
 				<i class="fas fa-arrow-right-long" /> [
 				<span style="color: #425f65;">{hp}</span>
 				- {totalDamage} ]
