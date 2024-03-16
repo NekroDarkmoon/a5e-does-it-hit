@@ -4,31 +4,34 @@
 
 	import { moduleName } from '../../modules/constants';
 
+	import RollRow from './RollRow.svelte';
+
 	export let target;
 	export let healingData;
 	export let cardData;
 
 	const message = getContext('message');
-	const { A5E } = CONFIG;
+	const { healingColors, healingTypes } = CONFIG.A5E;
 
 	let targetFlag = cardData.targetData?.healing?.[$target?.id];
+
 	let healingOption = healingData.map(({ healing, healingType }) => ({
 		healing,
 		healingType,
 	}));
 
 	function updateHealingOptions(event) {
-		const value = Number(event.value);
-		healingOption = healingData.map(({ healing, healingType }) => ({
-			healing: healing * value,
-			healingType,
-		}));
+		healingData.forEach(healingSource => {
+			healingSource.multiplier = Number(event.value);
+		});
+
+		healingData = healingData;
 	}
 
 	function applyHealing() {
 		$target.actor.applyBulkHealing(
 			healingOption.map(({ healing, healingType }) => [
-				healing,
+				Math.floor(healing * multiplier),
 				healingType,
 			]),
 		);
@@ -56,36 +59,37 @@
 		});
 	}
 
+	healingData = healingData.map(healingSource => ({
+		...healingSource,
+		multiplier: 1,
+	}));
+
+	$: hp = targetFlag?.hp ?? $target?.actor.system.attributes.hp.value;
+	$: tempHp = $target?.actor.system.attributes.hp.temp;
 	$: reactive = targetFlag?.hp ? false : true;
+
 	$: totalHealing = healingOption.reduce(
-		(acc, b) => {
-			if (b.healingType === 'temporaryHealing') {
-				acc.temp = Math.floor(acc.temp + b.healing);
-			} else acc.heal = Math.floor(acc.heal + b.healing);
-			return acc;
+		(cumulativeHealing, { healing, healingType, multiplier }) => {
+			const key = healingType === 'temporaryHealing' ? 'temp' : 'heal';
+			cumulativeHealing[key] += Math.floor(healing * multiplier);
+
+			return cumulativeHealing;
 		},
 		{ heal: 0, temp: 0 },
 	);
-	$: hp = targetFlag?.hp ?? $target?.actor.system.attributes.hp.value;
-	$: tempHp = $target?.actor.system.attributes.hp.temp;
 </script>
 
 <div class="healing-section">
 	{#if $target}
 		<ul class="dih-roll-list">
-			{#each healingData as { healingType, healing }, idx}
-				<li class="dih-roll-list__row">
-					{localize(A5E.healingTypes[healingType] ?? healingType)}
-					({Math.floor(healingOption[idx]?.healing)})
-
-					<select
-						class="multiplier"
-						bind:value={healingOption[idx].healing}
-					>
-						<option value={healing * 0}>None</option>
-						<option value={healing}>Base</option>
-					</select>
-				</li>
+			{#each healingData as { healingType, healing, multiplier }}
+				<RollRow
+					label={localize(healingTypes[healingType] ?? healingType)}
+					{multiplier}
+					roll={healing}
+					type="healing"
+					--dih-roll-color={healingColors[healingType]}
+				/>
 			{/each}
 		</ul>
 	{/if}

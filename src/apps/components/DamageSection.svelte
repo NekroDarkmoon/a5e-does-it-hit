@@ -95,9 +95,10 @@
 		<ul class="dih-roll-list">
 			{#each damageData as { damage, damageType, multiplier }}
 				<RollRow
-					roll={damage}
 					label={localize(damageTypes[damageType] ?? damageType)}
 					{multiplier}
+					roll={damage}
+					type="damage"
 					--dih-roll-color={damageColors[damageType]}
 				/>
 			{/each}

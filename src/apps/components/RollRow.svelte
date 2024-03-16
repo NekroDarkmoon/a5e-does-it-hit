@@ -2,6 +2,7 @@
 	export let roll;
 	export let label;
 	export let multiplier;
+	export let type;
 </script>
 
 <li class="dih-roll-list__row">
@@ -14,9 +15,12 @@
 	<select class="multiplier" bind:value={multiplier}>
 		<option value={0}>None</option>
 		<option value={1}>Base</option>
-		<option value={2}>2</option>
-		<option value={0.5}>1/2</option>
-		<option value={0.25}>1/4</option>
+
+		{#if type === 'damage'}
+			<option value={2}>2</option>
+			<option value={0.5}>1/2</option>
+			<option value={0.25}>1/4</option>
+		{/if}
 	</select>
 </li>
 
