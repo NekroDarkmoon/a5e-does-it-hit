@@ -88,7 +88,12 @@
 					{multiplier}
 					roll={healing}
 					type="healing"
-					--dih-roll-color={healingColors[healingType]}
+					--dih-roll-color={game.settings.get(
+						'a5e',
+						'enableDamageRollColors',
+					)
+						? healingColors[healingType]
+						: null}
 					on:updateSelection={event =>
 						updateSingleHealingMultiplier(event.detail, idx)}
 				/>
