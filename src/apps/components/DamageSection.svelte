@@ -1,15 +1,17 @@
 <script>
-	import { localize } from '#runtime/svelte/helper';
 	import { getContext } from 'svelte';
+	import { localize } from '#runtime/svelte/helper';
 
 	import { moduleName } from '../../modules/constants';
+
+	import RollRow from './RollRow.svelte';
 
 	export let target;
 	export let damageData;
 	export let cardData;
 
 	const message = getContext('message');
-	const { A5E } = CONFIG;
+	const { damageColors, damageTypes } = CONFIG.A5E;
 
 	let targetFlag = cardData.targetData?.damage?.[$target?.id];
 
@@ -92,18 +94,12 @@
 	{#if $target}
 		<ul class="dih-roll-list">
 			{#each damageData as { damage, damageType, multiplier }}
-				<li class="dih-roll-list__row">
-					{localize(A5E.damageTypes[damageType] ?? damageType)}
-					({Math.floor(damage * multiplier)})
-
-					<select class="multiplier" bind:value={multiplier}>
-						<option value={0}>None</option>
-						<option value={1}>Base</option>
-						<option value={2}>2</option>
-						<option value={0.5}>1/2</option>
-						<option value={0.25}>1/4</option>
-					</select>
-				</li>
+				<RollRow
+					roll={damage}
+					label={localize(damageTypes[damageType] ?? damageType)}
+					{multiplier}
+					--dih-roll-color={damageColors[damageType]}
+				/>
 			{/each}
 		</ul>
 
@@ -160,11 +156,6 @@
 
 	.damage-data {
 		flex-grow: 1;
-	}
-
-	.multiplier {
-		font-size: 0.694rem;
-		height: 1rem;
 	}
 
 	button {
