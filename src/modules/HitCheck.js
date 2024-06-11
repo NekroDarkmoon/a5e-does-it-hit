@@ -32,7 +32,7 @@ export default class HitCheck {
 		const chatData = {
 			user: game.user?.id,
 			speaker: ChatMessage.getSpeaker({ actor: item.parent }),
-			type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+			style: CONST.CHAT_MESSAGE_STYLES.OTHER,
 			sound: CONFIG.sounds.dice,
 			flags: {
 				[moduleName]: {
