@@ -23,8 +23,10 @@ export default class HitCheck {
 			rolls.filter(roll => roll.type === 'attack')[0]
 		);
 		const damageData = this.#prepareDamageData(
-			rolls.filter(roll => roll.type === 'damage')
+      rolls.filter(roll => roll.type === 'damage'),
+			attackData?.isCrit,
 		);
+
 		const healingData = this.#prepareHealingData(
 			rolls.filter(roll => roll.type === 'healing')
 		);
@@ -73,14 +75,14 @@ export default class HitCheck {
 	 *
 	 * @param {Array<Object>} damageRolls
 	 */
-	#prepareDamageData(damageRolls) {
+	#prepareDamageData(damageRolls, isCrit) {
 		if (!damageRolls.length) return;
 
 		const data = damageRolls.map(roll => {
 			return {
 				canCrit: roll.canCrit,
 				label: roll.label,
-				damage: roll.roll.total,
+				damage: isCrit? roll.critRoll.total : roll.roll.total,
 				damageType: roll.damageType,
 			};
 		});

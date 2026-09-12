@@ -9,6 +9,7 @@
 	export let target;
 	export let damageData;
 	export let cardData;
+	export let isCrit;
 
 	const message = getContext('message');
 	const { damageColors, damageTypes } = CONFIG.A5E;
@@ -84,6 +85,7 @@
 		...damageSource,
 		multiplier: getDefaultMultiplierForDamageType(damageSource),
 	}));
+
 
 	$: hp = targetFlag?.hp ?? $target?.actor.system.attributes.hp.value;
 	$: reactive = targetFlag?.hp ? false : true;

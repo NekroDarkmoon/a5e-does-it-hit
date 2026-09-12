@@ -37,7 +37,7 @@
 		<HitSection {target} {attackData} {cardData} />
 
 		{#if damageData}
-			<DamageSection {target} {damageData} {cardData} />
+			<DamageSection isCrit={attackData.isCrit} {target} {damageData} {cardData} />
 		{/if}
 
 		{#if damageData && healingData}
